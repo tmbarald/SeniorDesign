@@ -1,23 +1,40 @@
 import numpy as np
-import cv2
+import cv2 as cv
+import os.path
 
-cv2.namedWindow("preview")
+cap = cv.VideoCapture(1, cv.CAP_ANY)
+frame_count = 0
+frame_dir = os.getcwd() + "\\frame_dir"
+os.makedirs(frame_dir, exist_ok=True)
 
-out = cv2.VideoWriter('output.mp4', -1, 20.0, (640 ,480))
-vc = cv2.VideoCapture(1)
+# with open(frame_dir+'\\somefile.txt', 'w+') as the_file:
+#    the_file.write('Hello\n')
 
-if vc.isOpened(): # try to get the first frame
-    rval, frame = vc.read()
-else:
-    rval = False
+# Define the codec and create VideoWriter object
+fourcc = cv.VideoWriter_fourcc(*'XVID')
+out = cv.VideoWriter('output.avi', cv.CAP_ANY, fourcc, 60.0, (640, 480))
+print(out.getBackendName())
+print(cap.getBackendName())
 
-while rval:
-    rval, frame = vc.read()
-    out.write(frame)
-    cv2.imshow("preview", frame)
-    key = cv2.waitKey(20)
-    if key == 27: # exit on ESC
+while (cap.isOpened() & out.isOpened()):
+    ret, frame = cap.read()
+    if not ret:
+        print("Can't receive frame (stream end?). Exiting ...")
         break
-cv2.destroyWindow("preview")
+    # frame = cv.flip(frame, 0)
+    # write the flipped frame
+    out.write(frame)
+
+    #save frame by frame
+    cv.imwrite(frame_dir+"\\frame%d.jpg" %frame_count, frame)
+    frame_count += 1
+
+    cv.imshow('frame', frame)
+    if cv.waitKey(1) == ord('q'):
+        print(frame_count)
+        break
+
+# Release everything if job is finished
+cap.release()
 out.release()
-vc.release()
+cv.destroyAllWindows()
