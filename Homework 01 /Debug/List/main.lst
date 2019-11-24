@@ -1,0 +1,422 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           02/Jan/2019  19:43:02
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\main.c
+#    Command line  =  
+#        -f C:\Users\JIMCAR~1\AppData\Local\Temp\EW830E.tmp
+#        (E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\main.c -lC
+#        E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Debug\List -o
+#        E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Debug\List\main.lst
+#    Object file   =  
+#        E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Debug\Obj\main.r43
+#
+###############################################################################
+
+E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\main.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the Main Routine - "While" Operating System
+      4          //
+      5          //
+      6          //  Jim Carlson
+      7          //  Jan 2018
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "functions.h"
+     13          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x130
+   \   union <unnamed> _A_PM5CTL0_L
+   \                     _A_PM5CTL0_L:
+   \   000000                DS8 2
+     14          #include <string.h>
+     15          
+     16          #define RED_LED_ON      (P1OUT |= RED_LED)
+     17          #define RED_LED_OFF    (P1OUT &= ~RED_LED)
+     18          #define GREEN_LED_ON    (P6OUT |= GRN_LED)
+     19          #define GREEN_LED_OFF  (P6OUT &= ~GRN_LED)
+     20          #define ALWAYS                         (1)
+     21          #define RESET_STATE                    (0)
+     22          #define RED_LED                     (0x01) // RED LED 0
+     23          #define GRN_LED                     (0x40) // GREEN LED 1
+     24          
+     25          // Function Prototypes
+     26          void main(void);
+     27          void Init_Conditions(void);
+     28          void Init_LEDs(void);
+     29          
+     30            // Global Variables
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     31          volatile char slow_input_down;
+   \                     slow_input_down:
+   \   000000                DS8 1
+     32          extern char display_line[4][11];
+     33          extern char *display[4];
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     34          unsigned char display_mode;
+   \                     display_mode:
+   \   000000                DS8 1
+     35          extern volatile unsigned char display_changed;
+     36          extern volatile unsigned char update_display;
+     37          extern volatile unsigned int update_display_count;
+     38          extern volatile unsigned int Time_Sequence;
+     39          extern volatile char one_time;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     40          unsigned int test_value;
+   \                     test_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     41          char chosen_direction;
+   \                     chosen_direction:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     42          char change;
+   \                     change:
+   \   000000                DS8 1
+     43          
+
+   \                                 In  segment CODE, align 2
+     44          void main(void){
+   \                     main:
+     45          //------------------------------------------------------------------------------
+     46          // Main Program
+     47          // This is the main routine for the program. Execution of code starts here.
+     48          // The operating system is Back Ground Fore Ground.
+     49          //
+     50          //------------------------------------------------------------------------------
+     51          // Disable the GPIO power-on default high-impedance mode to activate
+     52          // previously configured port settings
+     53            PM5CTL0 &= ~LOCKLPM5;
+   \   000000   92C33001     BIC.W   #0x1, &0x130
+     54            Init_Ports();                        // Initialize Ports
+   \   000004   ........     CALLA   #Init_Ports
+     55            Init_Clocks();                       // Initialize Clock System
+   \   000008   ........     CALLA   #Init_Clocks
+     56            Init_Conditions();                   // Initialize Variables and Initial Conditions
+   \   00000C   ........     CALLA   #Init_Conditions
+     57            Init_Timers();                       // Initialize Timers
+   \   000010   ........     CALLA   #Init_Timers
+     58            Init_LCD();                          // Initialize LCD
+   \   000014   ........     CALLA   #Init_LCD
+     59          // Place the contents of what you want on the display, in between the quotes
+     60          // Limited to 10 characters per line
+     61          //
+     62          
+     63            strcpy(display_line[0], "   NCSU   ");
+   \   000018   3D40....     MOV.W   #`?<Constant "   NCSU   ">`, R13
+   \   00001C   3C40....     MOV.W   #display_line, R12
+   \   000020   ........     CALLA   #strcpy
+     64            update_string(display_line[0], 0);
+   \   000024   0D43         MOV.W   #0x0, R13
+   \   000026   ........     CALLA   #update_string
+     65            strcpy(display_line[1], " WOLFPACK ");
+   \   00002A   3D40....     MOV.W   #`?<Constant " WOLFPACK ">`, R13
+   \   00002E   3C40....     MOV.W   #display_line + 11, R12
+   \   000032   ........     CALLA   #strcpy
+     66            update_string(display_line[1], 1);
+   \   000036   1D43         MOV.W   #0x1, R13
+   \   000038   3C40....     MOV.W   #display_line + 11, R12
+   \   00003C   ........     CALLA   #update_string
+     67            strcpy(display_line[2], "  ECE306  ");
+   \   000040   3D40....     MOV.W   #`?<Constant "  ECE306  ">`, R13
+   \   000044   3C40....     MOV.W   #display_line + 22, R12
+   \   000048   ........     CALLA   #strcpy
+     68            update_string(display_line[3], 3);
+   \   00004C   3D400300     MOV.W   #0x3, R13
+   \   000050   3C40....     MOV.W   #display_line + 33, R12
+   \   000054   ........     CALLA   #update_string
+     69            enable_display_update();
+   \   000058   ........     CALLA   #enable_display_update
+     70          //  Display_Update(3,1,0,0);
+     71          
+     72          //------------------------------------------------------------------------------
+     73          // Begining of the "While" Operating System
+     74          //------------------------------------------------------------------------------
+     75            while(ALWAYS) {                      // Can the Operating system run
+     76              switch(Time_Sequence){
+   \                     ??main_0:
+   \   00005C   1F42....     MOV.W   &Time_Sequence, R15
+   \   000060   3F803200     SUB.W   #0x32, R15
+   \   000064   3B24         JEQ     ??main_7
+   \   000066   3F803200     SUB.W   #0x32, R15
+   \   00006A   2B24         JEQ     ??main_8
+   \   00006C   3F803200     SUB.W   #0x32, R15
+   \   000070   1D24         JEQ     ??main_9
+   \   000072   3F803200     SUB.W   #0x32, R15
+   \   000076   1124         JEQ     ??main_10
+   \   000078   3F803200     SUB.W   #0x32, R15
+   \   00007C   3920         JNE     ??main_6
+     77                case 250:                        //
+     78                  if(one_time){
+   \   00007E   C293....     CMP.B   #0x0, &one_time
+   \   000082   0824         JEQ     ??main_11
+     79                    Init_LEDs();
+   \   000084   ........     CALLA   #Init_LEDs
+     80                    lcd_BIG_mid();
+   \   000088   ........     CALLA   #lcd_BIG_mid
+     81                    display_changed = 1;
+   \   00008C   D243....     MOV.B   #0x1, &display_changed
+     82                    one_time = 0;
+   \   000090   C243....     MOV.B   #0x0, &one_time
+     83                  }
+     84                  Time_Sequence = 0;             //
+   \                     ??main_11:
+   \   000094   8243....     MOV.W   #0x0, &Time_Sequence
+     85                  break;
+   \   000098   2B3C         JMP     ??main_6
+     86                case 200:                        //
+     87                  if(one_time){
+   \                     ??main_10:
+   \   00009A   C293....     CMP.B   #0x0, &one_time
+   \   00009E   2824         JEQ     ??main_6
+     88                    GREEN_LED_ON;            // Change State of LED 5
+   \   0000A0   F2D040004302 BIS.B   #0x40, &0x243
+     89                    one_time = 0;
+   \   0000A6   C243....     MOV.B   #0x0, &one_time
+     90                  }
+     91                  break;
+   \   0000AA   223C         JMP     ??main_6
+     92                case 150:                         //
+     93                  if(one_time){
+   \                     ??main_9:
+   \   0000AC   C293....     CMP.B   #0x0, &one_time
+   \   0000B0   1F24         JEQ     ??main_6
+     94                    RED_LED_ON;            // Change State of LED 4
+   \   0000B2   D2D30202     BIS.B   #0x1, &0x202
+     95                    GREEN_LED_OFF;           // Change State of LED 5
+   \   0000B6   F2C040004302 BIC.B   #0x40, &0x243
+     96                    one_time = 0;
+   \   0000BC   C243....     MOV.B   #0x0, &one_time
+     97                  }
+     98                  break;
+   \   0000C0   173C         JMP     ??main_6
+     99                case 100:                         //
+    100                  if(one_time){
+   \                     ??main_8:
+   \   0000C2   C293....     CMP.B   #0x0, &one_time
+   \   0000C6   1424         JEQ     ??main_6
+    101                    lcd_4line();
+   \   0000C8   ........     CALLA   #lcd_4line
+    102                    GREEN_LED_ON;            // Change State of LED 5
+   \   0000CC   F2D040004302 BIS.B   #0x40, &0x243
+    103                    display_changed = 1;
+   \   0000D2   D243....     MOV.B   #0x1, &display_changed
+    104                    one_time = 0;
+   \   0000D6   C243....     MOV.B   #0x0, &one_time
+    105                  }
+    106                  break;
+   \   0000DA   0A3C         JMP     ??main_6
+    107                case  50:                        //
+    108                  if(one_time){
+   \                     ??main_7:
+   \   0000DC   C293....     CMP.B   #0x0, &one_time
+   \   0000E0   0724         JEQ     ??main_6
+    109                    RED_LED_OFF;           // Change State of LED 4
+   \   0000E2   D2C30202     BIC.B   #0x1, &0x202
+    110                    GREEN_LED_OFF;           // Change State of LED 5
+   \   0000E6   F2C040004302 BIC.B   #0x40, &0x243
+    111                    one_time = 0;
+   \   0000EC   C243....     MOV.B   #0x0, &one_time
+    112                  }
+    113                  break;                         //
+    114                default: break;
+    115              }
+    116              Switches_Process();                // Check for switch state change
+   \                     ??main_6:
+   \   0000F0   ........     CALLA   #Switches_Process
+    117              Display_Process();
+   \   0000F4   ........     CALLA   #Display_Process
+   \   0000F8   B13F         JMP     ??main_0
+   \   0000FA   0343         NOP
+   \   0000FC                REQUIRE _A_PM5CTL0_L
+   \   0000FC                REQUIRE _A_PCOUT_L
+   \   0000FC                REQUIRE _A_PAOUT_L
+    118          //    Wheels();
+    119          
+    120            }
+    121          //------------------------------------------------------------------------------
+    122          }
+    123          
+
+   \                                 In  segment CODE, align 2
+    124          void Init_Conditions(void){
+   \                     Init_Conditions:
+   \   000000   0A12         PUSH.W  R10
+    125          //------------------------------------------------------------------------------
+    126            int i;
+    127          
+    128            for(i=0;i<11;i++){
+   \   000002   0A43         MOV.W   #0x0, R10
+   \                     ??Init_Conditions_0:
+   \   000004   3A900B00     CMP.W   #0xb, R10
+   \   000008   0A34         JGE     ??Init_Conditions_1
+    129              display_line[0][i] = RESET_STATE;
+   \   00000A   CA43....     MOV.B   #0x0, display_line(R10)
+    130              display_line[1][i] = RESET_STATE;
+   \   00000E   CA43....     MOV.B   #0x0, display_line + 11(R10)
+    131              display_line[2][i] = RESET_STATE;
+   \   000012   CA43....     MOV.B   #0x0, display_line + 22(R10)
+    132              display_line[3][i] = RESET_STATE;
+   \   000016   CA43....     MOV.B   #0x0, display_line + 33(R10)
+    133            }
+   \   00001A   1A53         ADD.W   #0x1, R10
+   \   00001C   F33F         JMP     ??Init_Conditions_0
+    134            display_line[0][10] = 0;
+   \                     ??Init_Conditions_1:
+   \   00001E   C243....     MOV.B   #0x0, &display_line + 10
+    135            display_line[1][10] = 0;
+   \   000022   C243....     MOV.B   #0x0, &display_line + 21
+    136            display_line[2][10] = 0;
+   \   000026   C243....     MOV.B   #0x0, &display_line + 32
+    137            display_line[3][10] = 0;
+   \   00002A   C243....     MOV.B   #0x0, &display_line + 43
+    138          
+    139            display[0] = &display_line[0][0];
+   \   00002E   B240........ MOV.W   #display_line, &display
+    140            display[1] = &display_line[1][0];
+   \   000034   B240........ MOV.W   #display_line + 11, &display + 2
+    141            display[2] = &display_line[2][0];
+   \   00003A   B240........ MOV.W   #display_line + 22, &display + 4
+    142            display[3] = &display_line[3][0];
+   \   000040   B240........ MOV.W   #display_line + 33, &display + 6
+    143            update_display = 0;
+   \   000046   C243....     MOV.B   #0x0, &update_display
+    144            update_display_count = 0;
+   \   00004A   8243....     MOV.W   #0x0, &update_display_count
+    145          // Interrupts are disabled by default, enable them.
+    146            enable_interrupts();
+   \   00004E   ........     CALLA   #enable_interrupts
+    147          //------------------------------------------------------------------------------
+    148          }
+   \   000052   3A41         POP.W   R10
+   \   000054   1001         RETA
+    149          
+
+   \                                 In  segment CODE, align 2
+    150          void Init_LEDs(void){
+   \                     Init_LEDs:
+    151          //------------------------------------------------------------------------------
+    152          // LED Configurations
+    153          //------------------------------------------------------------------------------
+    154          // Turns on both LEDs
+    155            GREEN_LED_OFF;
+   \   000000   F2C040004302 BIC.B   #0x40, &0x243
+    156            RED_LED_OFF;
+   \   000006   D2C30202     BIC.B   #0x1, &0x202
+    157          //------------------------------------------------------------------------------
+    158          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PCOUT_L
+   \   00000C                REQUIRE _A_PAOUT_L
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "   NCSU   ">`:
+   \   000000   2020204E4353 DC8 "   NCSU   "
+   \            5520202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " WOLFPACK ">`:
+   \   000000   20574F4C4650 DC8 " WOLFPACK "
+   \            41434B2000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  ECE306  ">`:
+   \   000000   202045434533 DC8 "  ECE306  "
+   \            3036202000  
+    159          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   Init_Conditions
+        6   -> enable_interrupts
+      4   Init_LEDs
+      4   main
+        4   -> Display_Process
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_LEDs
+        4   -> Init_Ports
+        4   -> Init_Timers
+        4   -> Switches_Process
+        4   -> enable_display_update
+        4   -> lcd_4line
+        4   -> lcd_BIG_mid
+        4   -> strcpy
+        4   -> update_string
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant "   NCSU   ">
+      11  ?<Constant "  ECE306  ">
+      11  ?<Constant " WOLFPACK ">
+      86  Init_Conditions
+      12  Init_LEDs
+       2  _A_PAOUT_L
+       2  _A_PCOUT_L
+       2  _A_PM5CTL0_L
+       1  change
+       1  chosen_direction
+       1  display_mode
+     252  main
+       1  slow_input_down
+       2  test_value
+
+ 
+ 350 bytes in segment CODE
+   6 bytes in segment DATA16_AN
+  33 bytes in segment DATA16_C
+   6 bytes in segment DATA16_Z
+ 
+ 350 bytes of CODE  memory
+  33 bytes of CONST memory
+   6 bytes of DATA  memory (+ 6 bytes shared)
+
+Errors: none
+Warnings: none

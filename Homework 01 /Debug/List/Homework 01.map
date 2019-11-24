@@ -1,0 +1,610 @@
+################################################################################
+#                                                                              #
+#      IAR Universal Linker V6.5.1.95                                          #
+#                                                                              #
+#           Link time     =  02/Jan/2019  19:43:02                             #
+#           Target CPU    =  MSP430                                            #
+#           List file     =  "E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01 #
+#                            \Debug\List\Homework 01.map"                      #
+#           Output file 1 =  "E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01 #
+#                            \Debug\Exe\Homework 01.d43"                       #
+#                            Format: ubrof10                                   #
+#                            UBROF version 10.0.6                              #
+#                            Using library modules for C-SPY (-rt)             #
+#           Command line  =  -f                                                #
+#                            C:\Users\JIMCAR~1\AppData\Local\Temp\EW8477.tmp   #
+#                            (E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01 #
+#                            \Debug\Obj\clocks.r43                             #
+#                            E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\ #
+#                            Compiled\LCD.r43                                  #
+#                            E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\ #
+#                            Debug\Obj\main.r43                                #
+#                            E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\ #
+#                            Compiled\ports.r43                                #
+#                            E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\ #
+#                            Compiled\switches.r43                             #
+#                            E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\ #
+#                            Debug\Obj\system.r43                              #
+#                            E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\ #
+#                            Compiled\timersB0.r43                             #
+#                            -o                                                #
+#                            "E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01 #
+#                            \Debug\Exe\Homework 01.d43"                       #
+#                            -l                                                #
+#                            "E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01 #
+#                            \Debug\List\Homework 01.map"                      #
+#                            -xesni                                            #
+#                            "-IC:\Program Files (x86)\IAR Systems\Embedded Wo #
+#                            rkbench 8.0\430\LIB\"                             #
+#                            -f                                                #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 8.0\430\config\linker\lnk430fr2355.xcl"     #
+#                            (-cmsp430 -QCODE_I=CODE_ID -QTLS16_I=TLS16_ID     #
+#                            -D__iar_HWMUL=4C0 -Z(CONST)INFO=1800-19FF         #
+#                            -Z(DATA)TINYRAM=0006-001F                         #
+#                            -Z(DATA)DATA16_I,DATA16_Z,DATA16_N,TLS16_I=2000-2 #
+#                            FFF                                               #
+#                            -Z(DATA)CODE_I                                    #
+#                            -Z(DATA)DATA20_I,DATA20_Z,DATA20_N                #
+#                            -Z(DATA)CSTACK+_STACK_SIZE#                       #
+#                            -Z(CONST)FRWP_B1,DATA16_P,DATA20_P=8000-FF7F      #
+#                            -Z(DATA)DATA16_HEAP+_DATA16_HEAP_SIZE,DATA20_HEAP #
+#                            +_DATA20_HEAP_SIZE,FRWP_B2                        #
+#                            -Z(CONST)DATA16_C,DATA16_ID,TLS16_ID,DIFUNCT,CHEC #
+#                            KSUM=8000-FF7F                                    #
+#                            -Z(CONST)DATA20_C,DATA20_ID                       #
+#                            -Z(CODE)CSTART,ISR_CODE,CODE_ID=8000-FF7F         #
+#                            -P(CODE)CODE,CODE16=8000-FF7F                     #
+#                            -Z(CONST)BSLCONFIGURATIONSIGNATURE=FF88-FF89      #
+#                            -Z(CONST)BSLCONFIGURATION=FF8A-FF8B               #
+#                            -Z(CONST)BSLI2CADDRESS=FFA0-FFA1                  #
+#                            -Z(CONST)JTAGSIGNATURE=FF80-FF83                  #
+#                            -Z(CONST)BSLSIGNATURE=FF84-FF87                   #
+#                            -Z(CODE)INTVEC=FFA2-FFFF                          #
+#                            -Z(CODE)RESET=FFFE-FFFF) -f                       #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 8.0\430\config\linker\multiplier32.xcl"     #
+#                            (-e?Mul8Hw=?Mul8 -e?Mul16Hw=?Mul16                #
+#                            -e?Mul16to32uHw=?Mul16to32u                       #
+#                            -e?Mul16to32sHw=?Mul16to32s -e?Mul32Hw32=?Mul32   #
+#                            -e?Mul64Hw32=_Mul64i                              #
+#                            -e?Mul32u32uto64iHw32=_Mul32u32uto64i             #
+#                            -e?Mul32fHw32=_Mul32f                             #
+#                            -e_Mul64fHw32Ptr=_Mul64fPtr) -D_STACK_SIZE=A0     #
+#                            -rt                                               #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 8.0\430\lib\dlib\dl430xlsfn.r43"            #
+#                            -e_PrintfLarge=_Printf -e_ScanfLarge=_Scanf       #
+#                            -D_DATA16_HEAP_SIZE=A0 -s __program_start         #
+#                            -D_DATA20_HEAP_SIZE=50)                           #
+#                                                                              #
+#                           Copyright (C) 1987-2016 IAR Systems AB.            #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+       Program entry at :           8064  Relocatable, from module : ?cstart
+
+
+
+
+                ****************************************
+                *                                      *
+                *            RUNTIME MODEL             *
+                *                                      *
+                ****************************************
+
+  __Heap_Handler             = Basic
+  __SystemLibrary            = DLib
+  __code_model               = large
+  __core                     = 430X
+  __data_model               = small
+  __dlib_file_descriptor     = 0
+  __dlib_full_locale_support = 0
+  __double_size              = 32
+  __pic                      = no
+  __reg_r4                   = free
+  __reg_r5                   = free
+  __rt_version               = 3
+
+                ****************************************
+                *                                      *
+                *    AUTOMATIC SYMBOL REDIRECTIONS     *
+                *                                      *
+                ****************************************
+
+                  There are no automatic symbol redirections.
+
+                ****************************************
+                *                                      *
+                *              ENTRY LIST              *
+                *                                      *
+                ****************************************
+
+Module  Entry                              Address
+------  -----                              -------
+?FILLER_BYTES
+?ABS_ENTRY_MOD
+        _DATA20_HEAP_SIZE                   0050
+        _DATA16_HEAP_SIZE                   00A0
+        _STACK_SIZE                         00A0
+        __iar_HWMUL                         04C0
+clocks ( E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Debug\Obj\clocks.r43 )
+        _A_CSCTL0_L                         0180
+        _A_CSCTL1_L                         0182
+        _A_CSCTL2_L                         0184
+        _A_CSCTL3_L                         0186
+        _A_CSCTL4_L                         0188
+        _A_CSCTL5_L                         018A
+        _A_CSCTL7_L                         018E
+        _A_PM5CTL0_L                        0130
+        _A_SFRIFG1_L                        0102
+        _A_WDTCTL_L                         01CC
+        Init_Clocks                         860E
+        Software_Trim                       81EC
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        CSCTL0                              0180
+        CSCTL0_H                            0181
+        CSCTL0_L                            0180
+        CSCTL1                              0182
+        CSCTL1_H                            0183
+        CSCTL1_L                            0182
+        CSCTL2                              0184
+        CSCTL2_H                            0185
+        CSCTL2_L                            0184
+        CSCTL3                              0186
+        CSCTL3_H                            0187
+        CSCTL3_L                            0186
+        CSCTL4                              0188
+        CSCTL4_H                            0189
+        CSCTL4_L                            0188
+        CSCTL5                              018A
+        CSCTL5_H                            018B
+        CSCTL5_L                            018A
+        CSCTL7                              018E
+        CSCTL7_H                            018F
+        CSCTL7_L                            018E
+        PM5CTL0                             0130
+        PM5CTL0_H                           0131
+        PM5CTL0_L                           0130
+        SFRIFG1                             0102
+        SFRIFG1_H                           0103
+        SFRIFG1_L                           0102
+        WDTCTL                              01CC
+        WDTCTL_H                            01CD
+        WDTCTL_L                            01CC
+LCD ( E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Compiled\LCD.r43 )
+        _A_PBOUT_L                          0222
+        _A_TB0CCTL2_L                       0386
+        _A_TB0CCR2_L                        0396
+        _A_UCB1CTLW0_L                      05C0
+        _A_UCB1BRW_L                        05C6
+        _A_UCB1RXBUF_L                      05CC
+        _A_UCB1TXBUF_L                      05CE
+        _A_UCB1IFG_L                        05EC
+        current_character                   2010
+        update_display_count                2000
+        display_update_time                 NOT NEEDED
+        update_display                      2011
+        display_changed                     2012
+        lcd_control                         NOT NEEDED
+        display_line                        2013
+        display                             2002
+        posi_L1                             NOT NEEDED
+        posi_L2                             NOT NEEDED
+        posi_L3                             NOT NEEDED
+        posi_L4                             NOT NEEDED
+        char_count                          NOT NEEDED
+        current_line                        NOT NEEDED
+        LCD_test                            NOT NEEDED
+        spi_chipselect_idle                 89C6
+        spi_chipselect_active               8A20
+        spi_reset_idle                      8A2C
+        spi_reset_active                    8A38
+        Display_Process                     88A8
+        Display_Update                      877A
+        enable_display_update               8A06
+        update_string                       8904
+        Init_LCD                            82C6
+        lcd_4line                           89F8
+        lcd_BIG_mid                         88CA
+        lcd_out                             8884
+        lcd_puts                            NOT NEEDED
+        WriteIns                            885E
+        WriteData                           8838
+        CheckBusy                           NOT NEEDED
+        ClrDisplay                          8938
+        ClrDisplay_Buffer_0                 89B2
+        ClrDisplay_Buffer_1                 899E
+        ClrDisplay_Buffer_2                 894E
+        ClrDisplay_Buffer_3                 8962
+        SetPostion                          NOT NEEDED
+        DisplayOnOff                        898A
+        Init_SPI_B1                         87C0
+        SPI_B1_write                        88E8
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        TB0CCTL2                            0386
+        TB0CCTL2_H                          0387
+        TB0CCTL2_L                          0386
+        TB0CCR2                             0396
+        TB0CCR2_H                           0397
+        TB0CCR2_L                           0396
+        UCB1CTLW0                           05C0
+        UCB1CTLW0_H                         05C1
+        UCB1CTLW0_L                         05C0
+        UCB1BRW                             05C6
+        UCB1BRW_H                           05C7
+        UCB1BRW_L                           05C6
+        UCB1RXBUF                           05CC
+        UCB1RXBUF_H                         05CD
+        UCB1RXBUF_L                         05CC
+        UCB1TXBUF                           05CE
+        UCB1TXBUF_H                         05CF
+        UCB1TXBUF_L                         05CE
+        UCB1IFG                             05EC
+        UCB1IFG_H                           05ED
+        UCB1IFG_L                           05EC
+main ( E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Debug\Obj\main.r43 )
+        _A_PAOUT_L                          0202
+        _A_PCOUT_L                          0242
+        _A_PM5CTL0_L                        NOT NEEDED
+        slow_input_down                     NOT NEEDED
+        display_mode                        NOT NEEDED
+        test_value                          NOT NEEDED
+        chosen_direction                    NOT NEEDED
+        change                              NOT NEEDED
+        main                                80F0
+        Init_Conditions                     86D6
+        Init_LEDs                           8A14
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PAOUT                               0202
+        PAOUT_H                             0203
+        PAOUT_L                             0202
+        PCOUT                               0242
+        PCOUT_H                             0243
+        PCOUT_L                             0242
+        PM5CTL0                             0130
+        PM5CTL0_H                           0131
+        PM5CTL0_L                           0130
+ports ( E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Compiled\ports.r43 )
+        _A_PAOUT_L                          NOT NEEDED
+        _A_PADIR_L                          0204
+        _A_PAREN_L                          0206
+        _A_PASEL0_L                         020A
+        _A_PASEL1_L                         020C
+        _A_PBOUT_L                          NOT NEEDED
+        _A_PBDIR_L                          0224
+        _A_PBREN_L                          0226
+        _A_PBSEL0_L                         022A
+        _A_PBSEL1_L                         022C
+        _A_PCOUT_L                          NOT NEEDED
+        _A_PCDIR_L                          0244
+        _A_PCSEL0_L                         024A
+        _A_PCSEL1_L                         024C
+        cycles                              NOT NEEDED
+        one_time2                           NOT NEEDED
+        Init_Ports                          8920
+        Init_Port1                          8674
+        Init_Port2                          8516
+        Init_Port3                          83F8
+        Init_Port4                          8594
+        Init_Port5                          872C
+        Init_Port6                          848A
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PAOUT                               0202
+        PAOUT_H                             0203
+        PAOUT_L                             0202
+        PADIR                               0204
+        PADIR_H                             0205
+        PADIR_L                             0204
+        PAREN                               0206
+        PAREN_H                             0207
+        PAREN_L                             0206
+        PASEL0                              020A
+        PASEL0_H                            020B
+        PASEL0_L                            020A
+        PASEL1                              020C
+        PASEL1_H                            020D
+        PASEL1_L                            020C
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        PBDIR                               0224
+        PBDIR_H                             0225
+        PBDIR_L                             0224
+        PBREN                               0226
+        PBREN_H                             0227
+        PBREN_L                             0226
+        PBSEL0                              022A
+        PBSEL0_H                            022B
+        PBSEL0_L                            022A
+        PBSEL1                              022C
+        PBSEL1_H                            022D
+        PBSEL1_L                            022C
+        PCOUT                               0242
+        PCOUT_H                             0243
+        PCOUT_L                             0242
+        PCDIR                               0244
+        PCDIR_H                             0245
+        PCDIR_L                             0244
+        PCSEL0                              024A
+        PCSEL0_H                            024B
+        PCSEL0_L                            024A
+        PCSEL1                              024C
+        PCSEL1_H                            024D
+        PCSEL1_L                            024C
+switches ( E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Compiled\switches.r43 )
+        _A_PAIN_L                           0200
+        _A_PAOUT_L                          NOT NEEDED
+        _A_PAREN_L                          NOT NEEDED
+        _A_PBIN_L                           0220
+        _A_PBOUT_L                          NOT NEEDED
+        _A_PBREN_L                          NOT NEEDED
+        run_wheels                          NOT NEEDED
+        Init_Switches                       NOT NEEDED
+        enable_switch_SW1                   NOT NEEDED
+        enable_switch_SW2                   NOT NEEDED
+        Switches_Process                    8362
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PAIN                                0200
+        PAIN_H                              0201
+        PAIN_L                              0200
+        PAOUT                               0202
+        PAOUT_H                             0203
+        PAOUT_L                             0202
+        PAREN                               0206
+        PAREN_H                             0207
+        PAREN_L                             0206
+        PBIN                                0220
+        PBIN_H                              0221
+        PBIN_L                              0220
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        PBREN                               0226
+        PBREN_H                             0227
+        PBREN_L                             0226
+system ( E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Debug\Obj\system.r43 )
+        enable_interrupts                   8A32
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+timersB0 ( E:\Dropbox\NCSU\Current\Homework\HW1\Homework_01\Compiled\timersB0.r43 )
+        _A_TB0CTL_L                         0380
+        _A_TB0CCTL0_L                       0382
+        _A_TB0CCR0_L                        0392
+        _A_TB0CCR1_L                        0394
+        _A_TB0CCR2_L                        NOT NEEDED
+        _A_TB0EX0_L                         03A0
+        _A_TB0IV_L                          03AE
+        five_msec_count                     200A
+        Time_Sequence                       200C
+        one_time                            203F
+        time_pass_by                        200E
+        Init_Timers                         8A46
+        Init_Timer_B0                       87FE
+        Timer0_B0_ISR                       807C
+        TIMER0_B1_ISR                       80C2
+        TIMER0_B1_ISR::??INTVEC 84          FFF6
+        Timer0_B0_ISR::??INTVEC 86          FFF8
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        TB0CTL                              0380
+        TB0CTL_H                            0381
+        TB0CTL_L                            0380
+        TB0CCTL0                            0382
+        TB0CCTL0_H                          0383
+        TB0CCTL0_L                          0382
+        TB0CCR0                             0392
+        TB0CCR0_H                           0393
+        TB0CCR0_L                           0392
+        TB0CCR1                             0394
+        TB0CCR1_H                           0395
+        TB0CCR1_L                           0394
+        TB0CCR2                             0396
+        TB0CCR2_H                           0397
+        TB0CCR2_L                           0396
+        TB0EX0                              03A0
+        TB0EX0_H                            03A1
+        TB0EX0_L                            03A0
+        TB0IV                               03AE
+        TB0IV_H                             03AF
+        TB0IV_L                             03AE
+?abort ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        abort                               NOT NEEDED
+?__dbg_break ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __DebugBreak                        8A4A
+?__dwrite ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __dwrite                            NOT NEEDED
+?__exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __exit                              8976
+?__write ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __write                             NOT NEEDED
+?_exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        _exit                               8A42
+        __cstart_call_dtors                 NOT NEEDED
+        __cstart_closeall                   NOT NEEDED
+        __cstart_clearlocks                 NOT NEEDED
+?cppinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __call_ctors                        NOT NEEDED
+        __alloc_record_needed_destruction   NOT NEEDED
+        __record_needed_destruction         NOT NEEDED
+        __call_dtors                        NOT NEEDED
+        __data16_vec_cctor                  NOT NEEDED
+?cstart ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __program_start                     8064
+        ?cstart_begin                       8064
+        ?cstart_call_mpu_init               NOT NEEDED
+        ?cstart_call_frwp_init              NOT NEEDED
+        ?cstart_call_low_level_init         NOT NEEDED
+        ?cstart_init_copy_ramfunc           NOT NEEDED
+        ?cstart_init_zero                   8068
+        ?cstart_init_copy                   NOT NEEDED
+        ?cstart_init_zero20                 NOT NEEDED
+        ?cstart_init_copy20                 NOT NEEDED
+        __cstart_init_tls                   NOT NEEDED
+        ?cstart_call_ctors                  NOT NEEDED
+        ?cstart_call_main                   8074
+        ?cstart_end                         807C
+lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __low_level_init                    NOT NEEDED
+?reset_vector ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        ?reset_vector                       FFFE
+?exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        exit                                8A3E
+?FrwpInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __iar_430_frwp_init                 NOT NEEDED
+?malloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        malloc                              NOT NEEDED
+?memcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        memcpy                              NOT NEEDED
+?memmove ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        memmove                             NOT NEEDED
+?memzero ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __data16_memzero                    89D8
+        __data16_memcpy                     NOT NEEDED
+        __data16_memmove                    NOT NEEDED
+?MpuInit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __iar_430_mpu_init                  NOT NEEDED
+        ?mpu1_4k_init                       NOT NEEDED
+        ?mpu1_8k_init                       NOT NEEDED
+        ?mpu1_16k_init                      NOT NEEDED
+        ?mpu2_init                          NOT NEEDED
+?setjmp ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        setjmp                              NOT NEEDED
+        ?setjmp_r5                          NOT NEEDED
+        ?setjmp_r4                          NOT NEEDED
+        ?setjmp_end                         NOT NEEDED
+?longjmp ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        longjmp                             NOT NEEDED
+        ?longjmp_r5                         NOT NEEDED
+        ?longjmp_r4                         NOT NEEDED
+        ?longjmp_end                        NOT NEEDED
+?IndCallR11 ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        ?IndCallR11                         NOT NEEDED
+?IndCallR15 ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        ?IndCallR15                         NOT NEEDED
+?strcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        strcpy                              89E8
+?xcloseall ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        _Close_all                          NOT NEEDED
+?xgetmemchunk ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __data16_GetMemChunk                NOT NEEDED
+?xxmemxfree ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __data16_free                       NOT NEEDED
+?xxmemxmalloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.r43 )
+        __data16_Aldata                     NOT NEEDED
+        __data16_malloc                     NOT NEEDED
+        __data16_findmem                     LOCAL, NOT NEEDED
+
+
+                ****************************************
+                *                                      *
+                *            MODULE SUMMARY            *
+                *                                      *
+                ****************************************
+
+Module               CODE      DATA      CONST
+------               ----      ----      -----
+                    (Rel)  (Rel)  (Abs)  (Rel)
+?__dbg_break            2
+?__exit                20
+?_exit                  4
+?cstart                24
+?exit                   4
+?memzero               16
+?reset_vector           2
+?strcpy                16
+LCD                   712     57     12
+  + shared                            4
+clocks                320            18
+  + shared                            2
+main                  350                   33
+  + shared                            4
+ports                 734            18
+  + shared                            4
+switches              150             4     66
+system                  6
+timersB0              178      7     12
+  + common             88
+N/A (command line)           160
+N/A (alignment)
+----------          -----    ---     --     --
+Total:              2 538    224     78     99
+  + common             88
+
+
+                ****************************************
+                *                                      *
+                *      SEGMENTS IN ADDRESS ORDER       *
+                *                                      *
+                ****************************************
+
+
+SEGMENT              SPACE    START ADDRESS   END ADDRESS     SIZE  TYPE  ALIGN
+=======              =====    =============   ===========     ====  ====  =====
+DATA16_AN                              0102 - 0103               2   rel    0
+                                       0130 - 0131               2 
+                                       0180 - 018B               C 
+                                       018E - 018F               2 
+                                       01CC - 01CD               2 
+                                       0200 - 0207               8 
+                                       020A - 020D               4 
+                                       0220 - 0227               8 
+                                       022A - 022D               4 
+                                       0242 - 0245               4 
+                                       024A - 024D               4 
+                                       0380 - 0383               4 
+                                       0386 - 0387               2 
+                                       0392 - 0397               6 
+                                       03A0 - 03A1               2 
+                                       03AE - 03AF               2 
+                                       05C0 - 05C1               2 
+                                       05C6 - 05C7               2 
+                                       05CC - 05CF               4 
+                                       05EC - 05ED               2 
+DATA16_I                                  2000                       dse    0
+DATA16_Z                               2000 - 203F              40   rel    1
+CODE_I                                    2040                       rel    1
+DATA20_I                                  2040                       rel    1
+DATA20_Z                                  2040                       rel    1
+DATA20_N                                  2040                       rel    1
+CSTACK                                 2F60 - 2FFF              A0   rel    1
+DATA16_C                               8000 - 8062              63   rel    0
+DATA20_C                                  8064                       rel    1
+DATA20_ID                                 8064                       rel    1
+CSTART                                 8064 - 807B              18   rel    1
+ISR_CODE                               807C - 80EF              74   rel    1
+CODE_ID                                   80F0                       rel    1
+<CODE> 1                               80F0 - 8A4B             95C   rel    1
+INTVEC                                 FFA2 - FFF9              58   com    1
+RESET                                  FFFE - FFFF               2   rel    1
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+ 2 626 bytes of CODE  memory
+   224 bytes of DATA  memory (+ 78 absolute )
+    99 bytes of CONST memory
+
+Errors: none
+Warnings: none
+
