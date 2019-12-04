@@ -36,7 +36,7 @@ while(cap.isOpened()):
     if lines is not None:
         for line in lines:
             for x1, y1, x2, y2 in line:
-                cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.line(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
     # Display the result.
     cv2.imwrite('h_frame.png', frame)
     cv2.imshow('frame', frame)
