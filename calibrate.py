@@ -20,7 +20,7 @@ def calibrate():
 
     # get the image
     # frame_dir = os.getcwd() + "\\frame_dir\\checkerboard.jpg"
-    imgs = glob.glob(os.getcwd() +"\\frame_dir\\cb\\*.jpg")
+    imgs = glob.glob(os.getcwd() +"\\frame_dir\\checkerboards\\*.jpg")
 
     # prepare object points
     objP = np.zeros((8*6,3), np.float32)
@@ -122,3 +122,4 @@ def calibrate():
     #         print(frame_count)
     #         break
     
+calibrate()

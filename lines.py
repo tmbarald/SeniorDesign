@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as mp
+import tkinter
 
 cap = cv2.VideoCapture(0)
 #cap = cv2.VideoCapture('hotgif.gif')
