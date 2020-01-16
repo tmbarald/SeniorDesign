@@ -8,7 +8,7 @@ from PIL import ImageTk, Image
 class UserInterface:
     def __init__(self, window, title):
 
-
+        
         self.sourceCam = 0
 
         #creating a window
