@@ -18,7 +18,7 @@ class VideoCapture:
         self.vid.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         self.vid.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.vid.set(cv2.CAP_PROP_FOURCC, 0x32595559)
-        self.vid.set(cv2.CAP_PROP_FPS, 15)
+        #self.vid.set(cv2.CAP_PROP_FPS, 15)
 
     def get_frame(self):
         if self.vid.isOpened():
