@@ -14,6 +14,7 @@ class UserInterface:
         #creating a window
         self.window = window 
         self.window.title(title)
+        self.window.iconbitmap('.\\icons.\\Minecraft.ico')
         self.vid = VideoCapture(self.sourceCam)
         
         #sets up space for the video
