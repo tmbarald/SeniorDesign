@@ -1,6 +1,3 @@
-import tkinter as tk
-import os
-import sys
 import cv2
 from PIL import ImageTk, Image
 import time
