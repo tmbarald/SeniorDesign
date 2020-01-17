@@ -6,11 +6,13 @@ from VideoCapture import VideoCapture
 from PIL import ImageTk, Image
 
 class UserInterface:
+
+
     def __init__(self, window, title):
 
 
         self.sourceCam = 0
-
+        self.isRecording = False
         #creating a window
         self.window = window 
         self.window.title(title)
@@ -38,6 +40,7 @@ class UserInterface:
         self.capture_button["state"] = "disabled"
         self.stop_button["state"] = "normal"
         print("Started here")
+        self.isRecording = True
 
     #stop video recording
     #open up a prompt to name file to save to
@@ -45,11 +48,12 @@ class UserInterface:
         self.capture_button["state"] = "normal"
         self.stop_button["state"] = "disabled"
         print("Stopped here")
+        self.isRecording = False
 
 
     #Sends video frames to the gui, no slowdown so far
     def update(self):
-        ret, frame = self.vid.get_frame()
+        ret, frame = self.vid.get_frame(self.isRecording)
         if ret:
             self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
