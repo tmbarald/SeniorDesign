@@ -40,6 +40,7 @@ class UserInterface:
         self.capture_button["state"] = "disabled"
         self.stop_button["state"] = "normal"
         print("Started here")
+        self.vid.new_writer()
         self.isRecording = True
 
     #stop video recording
@@ -49,6 +50,7 @@ class UserInterface:
         self.stop_button["state"] = "disabled"
         print("Stopped here")
         self.isRecording = False
+        self.vid.close_writer()
 
 
     #Sends video frames to the gui, no slowdown so far

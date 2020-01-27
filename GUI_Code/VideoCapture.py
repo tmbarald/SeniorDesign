@@ -2,6 +2,8 @@ import cv2
 from PIL import ImageTk, Image
 import time
 import numpy as np
+import pyrealsense2 as rs
+
 
 #video class
 class VideoCapture:
@@ -24,7 +26,7 @@ class VideoCapture:
         #self.vid.set(cv2.CAP_PROP_FPS, 15)
 
         self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        self.out = cv2.VideoWriter('output.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+        #self.out = cv2.VideoWriter('output.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
 
     #update camera
     def get_frame(self, isRecording):
@@ -37,9 +39,16 @@ class VideoCapture:
                     self.out.write(frame)
                 return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             else:
-                return (ret, None)
+                raise ValueError("Video stream connection interrupted!", None)
         else:
             return (ret, None)
+    
+    #create new video writer object to write video frames
+    def new_writer(self):
+       self.out = cv2.VideoWriter('output.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480)) 
+
+    def close_writer(self):
+        self.out.release()
 
     #destructor
     def __del__(self):
