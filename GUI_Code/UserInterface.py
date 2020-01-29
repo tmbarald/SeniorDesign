@@ -16,11 +16,11 @@ class UserInterface:
         #creating a window
         self.window = window 
         self.window.title(title)
-        self.window.iconbitmap('.\\icons.\\Minecraft.ico')
+        #self.window.iconbitmap('.\\icons.\\Minecraft.ico')
         self.vid = VideoCapture(self.sourceCam)
         
         #sets up space for the video
-        self.canvas = tk.Canvas(window, width=self.vid.width, height=self.vid.height)
+        self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
         self.canvas.pack()
         
         #buttons
