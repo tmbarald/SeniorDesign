@@ -1,4 +1,4 @@
-# SeniorDesignPi
+# SeniorDesign
 
 calibrate.py - Calibrates the camera by looking for a checkerboard pattern in the image.  Several iamges are required for this process to work.
 

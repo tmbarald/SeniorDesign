@@ -23,13 +23,18 @@ class VideoCapture:
         #not sure if we need this to set fps
         #self.vid.set(cv2.CAP_PROP_FPS, 15)
 
+        self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        self.out = cv2.VideoWriter('output.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+
     #update camera
-    def get_frame(self):
+    def get_frame(self, isRecording):
         #camera is running
         if self.vid.isOpened():
             #grab current fram
             ret, frame = self.vid.read()
             if ret:
+                if isRecording:
+                    self.out.write(frame)
                 return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             else:
                 return (ret, None)
