@@ -19,15 +19,6 @@ class VideoCapture:
         
         self.pipeline.start(self.config)
 
-        # #getting the webcam
-        # self.vid = cv2.VideoCapture(sourceCam)
-        # if not self.vid.isOpened():
-        #     raise ValueError("source is wrong", 0)
-
-        # #resolution of the camera
-        #self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        #self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
-
         # #sets canvas to max width and height of captured video
         # self.vid.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         # self.vid.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
@@ -35,8 +26,9 @@ class VideoCapture:
         # #not sure if we need this to set fps
         # #self.vid.set(cv2.CAP_PROP_FPS, 15)
 
-        # self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        # #self.out = cv2.VideoWriter('output.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+        self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        self.color_out = cv2.VideoWriter('color_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+        self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
 
     #update camera
     def get_frame(self, isRecording):
@@ -53,28 +45,25 @@ class VideoCapture:
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
 
+        #saves rgb and depth videos to two different files
+        if isRecording:
+            self.color_out.write(cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB))
+            self.depth_out.write(depth_colormap)
+
         # Stack both images horizontally
         images = np.hstack((color_image, depth_colormap))
         return (1, images)
 
-        # if self.vid.isOpened():
-        #     #grab current frame
-        #     ret, frame = self.vid.read()
-        #     if ret:
-        #         if isRecording:
-        #             self.out.write(frame)
-        #         return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        #     else:
-        #         raise ValueError("Video stream connection interrupted!", None)
-        # else:
-        #     return (ret, None)
+
     
     #create new video writer object to write video frames
     def new_writer(self):
-       self.out = cv2.VideoWriter('output.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480)) 
+       self.color_out = cv2.VideoWriter('color_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+       self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640, 480))
 
     def close_writer(self):
-        self.out.release()
+        self.color_out.release()
+        self.depth_out.release()
 
     #destructor
     def __del__(self):
