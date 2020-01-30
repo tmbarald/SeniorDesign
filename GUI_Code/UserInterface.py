@@ -7,16 +7,16 @@ from PIL import ImageTk, Image
 
 class UserInterface:
 
-
     def __init__(self, window, title):
 
-        
+        self.overlay = cv2.imread('../assets/overlay2.png')
+        self.alignOverlay = True
+
         self.sourceCam = 0
         self.isRecording = False
         #creating a window
         self.window = window 
         self.window.title(title)
-        #self.window.iconbitmap('.\\icons.\\Minecraft.ico')
         self.vid = VideoCapture(self.sourceCam)
         
         #sets up space for the video
@@ -24,12 +24,12 @@ class UserInterface:
         self.canvas.pack()
         
         #buttons
-        self.capture_button = tk.Button(window, text="Begin Capture", command=self.begin_capture)
+        self.capture_button = tk.Button(window, text = "Begin Capture", command=self.begin_capture)
         self.capture_button.pack()
-        self.stop_button = tk.Button(window, text="Stop Capture", state="disabled", command=self.stop_capture)
+        self.stop_button = tk.Button(window, text = "Stop Capture", state = "disabled", command = self.stop_capture)
         self.stop_button.pack()
         
-        #cannot run continuosly
+        #cannot run continuously
         self.delay = .5
         self.update()
 
@@ -55,8 +55,12 @@ class UserInterface:
 
     #Sends video frames to the gui, no slowdown so far
     def update(self):
+
         ret, frame = self.vid.get_frame(self.isRecording)
         if ret:
+            #if self.alignOverlay:
+             #   frame = cv2.addWeighted(frame,0.5,self.overlay,0.5,0)
+
             self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
         self.canvas.after(1, self.update)
