@@ -16,11 +16,11 @@ class UserInterface:
         #creating a window
         self.window = window 
         self.window.title(title)
-        self.window.iconbitmap('.\\icons.\\Minecraft.ico')
+        #self.window.iconbitmap('.\\icons.\\Minecraft.ico')
         self.vid = VideoCapture(self.sourceCam)
         
         #sets up space for the video
-        self.canvas = tk.Canvas(window, width=self.vid.width, height=self.vid.height)
+        self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
         self.canvas.pack()
         
         #buttons
@@ -40,6 +40,7 @@ class UserInterface:
         self.capture_button["state"] = "disabled"
         self.stop_button["state"] = "normal"
         print("Started here")
+        self.vid.new_writer()
         self.isRecording = True
 
     #stop video recording
@@ -49,6 +50,7 @@ class UserInterface:
         self.stop_button["state"] = "disabled"
         print("Stopped here")
         self.isRecording = False
+        self.vid.close_writer()
 
 
     #Sends video frames to the gui, no slowdown so far
