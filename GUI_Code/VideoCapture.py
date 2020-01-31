@@ -11,18 +11,24 @@ class VideoCapture:
 
         self.width = 640
         self.height = 480
+        self.fps = 30
 
         self.pipeline = rs.pipeline()
         self.config = rs.config()
-        self.config.enable_stream(rs.stream.depth, self.width, self.height, rs.format.z16, 30)
-        self.config.enable_stream(rs.stream.color, self.width, self.height, rs.format.rgb8, 30)
+        self.config.enable_stream(rs.stream.depth, self.width, self.height, rs.format.z16, self.fps)
+        self.config.enable_stream(rs.stream.color, self.width, self.height, rs.format.rgb8, self.fps)
         
         self.pipeline.start(self.config)
 
+
+        self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        self.color_out = cv2.VideoWriter('color_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+        self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+
     #update camera
     def get_frame(self, isRecording):
-        #camera is running
-
+        
+        #wait for frames from d435
         frames = self.pipeline.wait_for_frames()
         depth_frame = frames.get_depth_frame()
         color_frame = frames.get_color_frame()
@@ -34,17 +40,24 @@ class VideoCapture:
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
 
+        #saves rgb and depth videos to two different files
+        if isRecording:
+            self.color_out.write(cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB))
+            self.depth_out.write(depth_colormap)
+
         # Stack both images horizontally
         images = np.hstack((color_image, depth_colormap))
         return (1, images)
 
-    
+
     #create new video writer object to write video frames
     def new_writer(self):
-       self.out = cv2.VideoWriter('output.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480)) 
+       self.color_out = cv2.VideoWriter('color_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
+       self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640, 480))
 
     def close_writer(self):
-        self.out.release()
+        self.color_out.release()
+        self.depth_out.release()
 
     #destructor
     def __del__(self):
