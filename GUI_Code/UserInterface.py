@@ -9,17 +9,17 @@ class UserInterface:
 
     def __init__(self, window, title):
 
-        self.overlay = cv2.imread('../assets/overlay2.png')
-        self.alignOverlay = True
-
         self.sourceCam = 0
         self.isRecording = False
         self.vid = VideoCapture(self.sourceCam)
+        self.overlay = cv2.imread('../assets/overlay2.png')
+        self.alignOverlay = True
 
         #creating a window
         self.window = window 
         self.window.option_add('*tearOff', False)
         self.window.title(title)
+        
         self.window.iconbitmap('.\\icons.\\Minecraft.ico')
 
         #main menu bar
@@ -88,12 +88,10 @@ class UserInterface:
 
     #Sends video frames to the gui, no slowdown so far
     def update(self):
-
         ret, frame = self.vid.get_frame(self.isRecording)
         if ret:
             if self.alignOverlay:
                 frame = cv2.addWeighted(frame,0.5,self.overlay,0.5,0)
-
             self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
         self.canvas.after(1, self.update)
