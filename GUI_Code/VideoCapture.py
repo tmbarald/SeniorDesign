@@ -9,19 +9,19 @@ import pyrealsense2 as rs
 class VideoCapture:
     def __init__(self,sourceCam):
 
-        self.width = 640
+        self.width  = 640
         self.height = 480
-        self.fps = 30
+        self.fps    = 30
 
         self.pipeline = rs.pipeline()
-        self.config = rs.config()
+        
+        self.config   = rs.config()
         self.config.enable_stream(rs.stream.depth, self.width, self.height, rs.format.z16, self.fps)
         self.config.enable_stream(rs.stream.color, self.width, self.height, rs.format.rgb8, self.fps)
         
         self.pipeline.start(self.config)
 
-
-        self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        self.fourcc    = cv2.VideoWriter_fourcc(*'XVID')
         self.color_out = cv2.VideoWriter('color_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
         self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
 
@@ -29,7 +29,8 @@ class VideoCapture:
     def get_frame(self, isRecording):
         
         #wait for frames from d435
-        frames = self.pipeline.wait_for_frames()
+
+        frames      = self.pipeline.wait_for_frames()
         depth_frame = frames.get_depth_frame()
         color_frame = frames.get_color_frame()
 
@@ -53,7 +54,7 @@ class VideoCapture:
     #create new video writer object to write video frames
     def new_writer(self):
        self.color_out = cv2.VideoWriter('color_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
-       self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640, 480))
+       self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, 30.0, (640,480))
 
     def close_writer(self):
         self.color_out.release()

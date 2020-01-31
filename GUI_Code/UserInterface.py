@@ -9,10 +9,11 @@ class UserInterface:
 
     def __init__(self, window, title):
 
-        self.sourceCam = 0
-        self.isRecording = False
-        self.vid = VideoCapture(self.sourceCam)
-        self.overlay = cv2.imread('../assets/overlay2.png')
+        
+        self.sourceCam    = 0
+        self.isRecording  = False
+        self.vid          = VideoCapture(self.sourceCam)
+        self.overlay      = cv2.imread('../assets/overlay2.png')
         self.alignOverlay = True
 
         #creating a window
@@ -22,11 +23,15 @@ class UserInterface:
         
         self.window.iconbitmap('.\\icons.\\Minecraft.ico')
 
+        ##############################################
+        #                   MENUS                    #
+        ##############################################
         #main menu bar
-        self.menu = tk.Menu(self.window)                
-        self.file_menu = tk.Menu(self.menu)             #file sub menu child
+        self.menu          = tk.Menu(self.window)           
+        self.file_menu     = tk.Menu(self.menu)             #file sub menu child
         self.settings_menu = tk.Menu(self.menu)             #settings sub menu child
-        self.help_menu = tk.Menu(self.menu)             #help sub menu child
+        self.help_menu     = tk.Menu(self.menu)             #help sub menu child
+        
         #items for file submenu
         self.file_menu.add_command(label = 'New Video')
         self.file_menu.add_command(label = 'New Analysis')
@@ -35,12 +40,14 @@ class UserInterface:
         self.file_menu.add_command(label = 'Save As..')
         self.file_menu.add_command(label = 'Exit', command=self.window.destroy)
         self.menu.add_cascade(label='File', menu=self.file_menu)
+        
         #items for the settings submenu
         self.settings_menu.add_command(label = 'Resolution')
         self.settings_menu.add_command(label = 'FPS')
         self.settings_menu.add_command(label = 'Video Extension')
         self.settings_menu.add_command(label = 'Save Video Seperately')
         self.menu.add_cascade(label='Settings', menu=self.settings_menu)
+        
         #items for the help submenu
         self.help_menu.add_command(label = 'VVV Documentation')
         self.help_menu.add_command(label = 'VVV GitHub')
@@ -56,20 +63,26 @@ class UserInterface:
         self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
         self.canvas.pack()
         
-        #buttons
+        ##############################################
+        #                  BUTTONS                   #
+        ##############################################
         self.capture_button = tk.Button(window, text = "Begin Capture", command=self.begin_capture)
         self.capture_button.pack()
+        
         self.stop_button = tk.Button(window, text = "Stop Capture", state = "disabled", command = self.stop_capture)
         self.stop_button.pack()
+        
         self.toggle_overlay_button = tk.Button(window, text = "Toggle Overlay", command=self.toggle_overlay)
         self.toggle_overlay_button.pack()
 
-        #cannot run continuously
-        self.delay = .5
+        #Cannot run continuously
+        self.delay = .1
         self.update()
 
         self.window.mainloop()
 
+
+        
     #start video recording
     def begin_capture(self):
         self.capture_button["state"] = "disabled"
