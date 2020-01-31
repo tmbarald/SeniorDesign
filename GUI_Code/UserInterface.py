@@ -10,15 +10,46 @@ class UserInterface:
 
     def __init__(self, window, title):
 
-
         self.sourceCam = 0
         self.isRecording = False
+        self.vid = VideoCapture(self.sourceCam)
+
         #creating a window
         self.window = window 
+        self.window.option_add('*tearOff', False)
         self.window.title(title)
-        #self.window.iconbitmap('.\\icons.\\Minecraft.ico')
-        self.vid = VideoCapture(self.sourceCam)
-        
+        self.window.iconbitmap('.\\icons.\\Minecraft.ico')
+
+        #main menu bar
+        self.menu = tk.Menu(self.window)                
+        self.file_menu = tk.Menu(self.menu)             #file sub menu child
+        self.settings_menu = tk.Menu(self.menu)             #settings sub menu child
+        self.help_menu = tk.Menu(self.menu)             #help sub menu child
+        #items for file submenu
+        self.file_menu.add_command(label = 'New Video')
+        self.file_menu.add_command(label = 'New Analysis')
+        self.file_menu.add_command(label = 'Open Video')
+        self.file_menu.add_command(label = 'Open Anaylsis')
+        self.file_menu.add_command(label = 'Save As..')
+        self.file_menu.add_command(label = 'Exit', command=self.window.destroy)
+        self.menu.add_cascade(label='File', menu=self.file_menu)
+        #items for the settings submenu
+        self.settings_menu.add_command(label = 'Resolution')
+        self.settings_menu.add_command(label = 'FPS')
+        self.settings_menu.add_command(label = 'Video Extension')
+        self.settings_menu.add_command(label = 'Save Video Seperately')
+        self.menu.add_cascade(label='Settings', menu=self.settings_menu)
+        #items for the help submenu
+        self.help_menu.add_command(label = 'VVV Documentation')
+        self.help_menu.add_command(label = 'VVV GitHub')
+        self.help_menu.add_command(label = 'Python')
+        self.help_menu.add_command(label = 'RealSenseSDK')
+        self.help_menu.add_command(label = 'OpenCV')
+        self.help_menu.add_command(label = 'About')
+        self.menu.add_cascade(label='Help', menu=self.help_menu)
+
+        self.window.config(menu=self.menu)
+
         #sets up space for the video
         self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
         self.canvas.pack()
@@ -60,3 +91,4 @@ class UserInterface:
             self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
         self.canvas.after(1, self.update)
+        # exit
