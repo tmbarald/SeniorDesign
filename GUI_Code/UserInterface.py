@@ -9,6 +9,7 @@ class UserInterface:
 
     def __init__(self, window, title):
 
+
         self.overlay = cv2.imread('../assets/overlay2.png')
         self.alignOverlay = True
 
