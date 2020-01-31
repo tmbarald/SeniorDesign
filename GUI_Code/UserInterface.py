@@ -59,8 +59,8 @@ class UserInterface:
 
         ret, frame = self.vid.get_frame(self.isRecording)
         if ret:
-            #if self.alignOverlay:
-             #   frame = cv2.addWeighted(frame,0.5,self.overlay,0.5,0)
+            if self.alignOverlay:
+                frame = cv2.addWeighted(frame,0.5,self.overlay,0.5,0)
 
             self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
