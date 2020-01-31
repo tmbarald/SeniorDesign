@@ -61,7 +61,9 @@ class UserInterface:
         self.capture_button.pack()
         self.stop_button = tk.Button(window, text = "Stop Capture", state = "disabled", command = self.stop_capture)
         self.stop_button.pack()
-        
+        self.toggle_overlay_button = tk.Button(window, text = "Toggle Overlay", command=self.toggle_overlay)
+        self.toggle_overlay_button.pack()
+
         #cannot run continuously
         self.delay = .5
         self.update()
@@ -96,3 +98,9 @@ class UserInterface:
             self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
         self.canvas.after(1, self.update)
         # exit
+
+    def toggle_overlay(self):
+        if self.alignOverlay:
+            self.alignOverlay = False
+        else:
+            self.alignOverlay = True
