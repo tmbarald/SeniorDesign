@@ -1,3 +1,4 @@
+import tkinter.filedialog
 import tkinter as tk
 import cv2
 import time
@@ -7,9 +8,8 @@ from PIL import ImageTk, Image
 
 class UserInterface:
 
-    def __init__(self, window, title):
 
-        
+    def __init__(self, window, title):        
         self.sourceCam    = 0
         self.isRecording  = False
         self.vid          = VideoCapture(self.sourceCam)
@@ -80,13 +80,14 @@ class UserInterface:
         self.update()
 
         self.window.mainloop()
-
-
         
     #start video recording
     def begin_capture(self):
+    
+        #Toggle Capability of Pressing Buttons
         self.capture_button["state"] = "disabled"
-        self.stop_button["state"] = "normal"
+        self.stop_button   ["state"] = "normal"
+        
         print("Started here")
         self.vid.new_writer()
         self.isRecording = True
@@ -94,9 +95,14 @@ class UserInterface:
     #stop video recording
     #open up a prompt to name file to save to
     def stop_capture(self):
+    
+        #Toggle Capability of Pressing Buttons
         self.capture_button["state"] = "normal"
-        self.stop_button["state"] = "disabled"
+        self.stop_button   ["state"] = "disabled"
+        
         print("Stopped here")
+        self.vid.save()
+        
         self.isRecording = False
         self.vid.close_writer()
 
