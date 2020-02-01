@@ -11,7 +11,7 @@ class VideoCapture:
 
         self.width  = 640
         self.height = 480
-        self.fps    = 30
+        self.fps    = 60
 
         self.pipeline = rs.pipeline()
         
