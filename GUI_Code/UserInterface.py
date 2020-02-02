@@ -14,11 +14,11 @@ class UserInterface:
         self.isRecording  = False
         
         try:
-            self.vid          = VideoCapture(self.sourceCam)
+            self.vid = VideoCapture(self.sourceCam)
         except RuntimeError:
             print("COULD NOT FIND CAMERA")
             
-        self.overlay      = cv2.imread('../assets/overlay2.png')
+        self.overlay = cv2.imread('../assets/overlay2.png')
         self.alignOverlay = True
 
         #creating a window
@@ -31,6 +31,8 @@ class UserInterface:
         ##############################################
         #                   MENUS                    #
         ##############################################
+        
+
         #main menu bar
         self.menu          = tk.Menu(self.window)           
         self.file_menu     = tk.Menu(self.menu)             #file sub menu child
@@ -38,28 +40,28 @@ class UserInterface:
         self.help_menu     = tk.Menu(self.menu)             #help sub menu child
         
         #items for file submenu
-        self.file_menu.add_command(label = 'New Video')
-        self.file_menu.add_command(label = 'New Analysis')
-        self.file_menu.add_command(label = 'Open Video')
-        self.file_menu.add_command(label = 'Open Anaylsis')
-        self.file_menu.add_command(label = 'Save As..')
+        self.file_menu.add_command(label = 'New Video', command=self.update_settings)
+        self.file_menu.add_command(label = 'New Analysis', command=self.update_settings)
+        self.file_menu.add_command(label = 'Open Video', command=self.update_settings)
+        self.file_menu.add_command(label = 'Open Anaylsis', command=self.update_settings)
+        self.file_menu.add_command(label = 'Save As..', command=self.update_settings)
         self.file_menu.add_command(label = 'Exit', command=self.window.destroy)
         self.menu.add_cascade(label='File', menu=self.file_menu)
-        
+
         #items for the settings submenu
-        self.settings_menu.add_command(label = 'Resolution')
-        self.settings_menu.add_command(label = 'FPS')
-        self.settings_menu.add_command(label = 'Video Extension')
-        self.settings_menu.add_command(label = 'Save Video Seperately')
+        self.settings_menu.add_command(label = 'Resolution', command=self.update_settings)
+        self.settings_menu.add_command(label = 'FPS', command=self.update_settings)
+        self.settings_menu.add_command(label = 'Video Extension', command=self.update_settings)
+        self.settings_menu.add_command(label = 'Save Video Seperately', command=self.update_settings)
         self.menu.add_cascade(label='Settings', menu=self.settings_menu)
         
         #items for the help submenu
-        self.help_menu.add_command(label = 'VVV Documentation')
-        self.help_menu.add_command(label = 'VVV GitHub')
-        self.help_menu.add_command(label = 'Python')
-        self.help_menu.add_command(label = 'RealSenseSDK')
-        self.help_menu.add_command(label = 'OpenCV')
-        self.help_menu.add_command(label = 'About')
+        self.help_menu.add_command(label = 'VVV Documentation', command=self.update_settings)
+        self.help_menu.add_command(label = 'VVV GitHub', command=self.update_settings)
+        self.help_menu.add_command(label = 'Python', command=self.update_settings)
+        self.help_menu.add_command(label = 'RealSenseSDK', command=self.update_settings)
+        self.help_menu.add_command(label = 'OpenCV', command=self.update_settings)
+        self.help_menu.add_command(label = 'About', command=self.update_settings)
         self.menu.add_cascade(label='Help', menu=self.help_menu)
 
         self.window.config(menu=self.menu)
@@ -139,3 +141,14 @@ class UserInterface:
             self.alignOverlay = False
         else:
             self.alignOverlay = True
+        
+    def update_settings(self):
+        print("Menu item selected!\n")
+        self.window.settings = tk.Tk()
+        self.window.settings.title("Settings")
+        self.window.settings.geometry('350x200')
+        self.btn = tk.Button(self.window.settings, text = "Click me to close", command = self.window.settings.destroy)
+        self.btn.grid(column=1, row=0)
+        #self.settings.
+    
+
