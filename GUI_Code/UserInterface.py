@@ -1,8 +1,12 @@
 import tkinter.filedialog
 import tkinter as tk
+from tkinter import *
+from tkinter import ttk
+
 import cv2
 import time
 import numpy as np
+
 from VideoCapture import VideoCapture
 from PIL import ImageTk, Image
 
@@ -72,19 +76,22 @@ class UserInterface:
         except AttributeError:
             print("NO VIDEO TO DISPLAY")
             self.canvas = tk.Canvas(self.window, width = 640, height = 480)
-        self.canvas.pack()
+        self.canvas.grid(column = 0, row = 0, columnspan = 8, rowspan = 8)
         
         ##############################################
         #                  BUTTONS                   #
         ##############################################
         self.capture_button = tk.Button(window, text = "Begin Capture", command=self.begin_capture)
-        self.capture_button.pack()
+        #self.capture_button.pack()
+        self.capture_button.grid(column = 0, row = 8, sticky = "nsew")
         
         self.stop_button = tk.Button(window, text = "Stop Capture", state = "disabled", command = self.stop_capture)
-        self.stop_button.pack()
+        #self.stop_button.pack()
+        self.stop_button.grid(column = 1, row = 8, sticky = "nsew", padx = 1)
         
         self.toggle_overlay_button = tk.Button(window, text = "Toggle Overlay", command=self.toggle_overlay)
-        self.toggle_overlay_button.pack()
+        #self.toggle_overlay_button.pack()
+        self.toggle_overlay_button.grid(column = 7, row = 8, sticky = "nsew")
 
         #Cannot run continuously
         self.delay = .1
