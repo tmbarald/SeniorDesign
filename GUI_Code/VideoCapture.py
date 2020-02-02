@@ -53,7 +53,6 @@ class VideoCapture:
         images = np.hstack((color_image, depth_colormap))
         return (1, images)
 
-
     #create new video writer object to write video frames
     def new_writer(self):
        self.color_out = cv2.VideoWriter(self.fileName + 'color_out.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
