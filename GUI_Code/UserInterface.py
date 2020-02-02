@@ -12,7 +12,12 @@ class UserInterface:
     def __init__(self, window, title):        
         self.sourceCam    = 0
         self.isRecording  = False
-        self.vid          = VideoCapture(self.sourceCam)
+        
+        try:
+            self.vid          = VideoCapture(self.sourceCam)
+        except RuntimeError:
+            print("COULD NOT FIND CAMERA")
+            
         self.overlay      = cv2.imread('../assets/overlay2.png')
         self.alignOverlay = True
 
@@ -60,7 +65,11 @@ class UserInterface:
         self.window.config(menu=self.menu)
 
         #sets up space for the video
-        self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
+        try:
+            self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
+        except AttributeError:
+            print("NO VIDEO TO DISPLAY")
+            self.canvas = tk.Canvas(self.window, width = 640, height = 480)
         self.canvas.pack()
         
         ##############################################
@@ -109,14 +118,20 @@ class UserInterface:
 
     #Sends video frames to the gui, no slowdown so far
     def update(self):
-        ret, frame = self.vid.get_frame(self.isRecording)
-        if ret:
-            if self.alignOverlay:
-                frame = cv2.addWeighted(frame,1,self.overlay,1,0)
+        try:    
+            ret, frame = self.vid.get_frame(self.isRecording)
+            
+            if ret:
+                if self.alignOverlay:
+                    frame = cv2.addWeighted(frame,1,self.overlay,1,0)
 
-            self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
-            self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
-        self.canvas.after(1, self.update)
+                self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
+                self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
+            self.canvas.after(1, self.update)
+            
+        except AttributeError:
+            print("NO VIDEO TO UPDATE")
+        
         # exit
 
     def toggle_overlay(self):

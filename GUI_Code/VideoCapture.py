@@ -68,5 +68,8 @@ class VideoCapture:
         
     #destructor
     def __del__(self):
-        self.pipeline.stop()
+        try:
+            self.pipeline.stop()
+        except:
+            pass
     
