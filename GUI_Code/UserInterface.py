@@ -1,3 +1,4 @@
+import tkinter.filedialog
 import tkinter as tk
 import cv2
 import time
@@ -7,12 +8,16 @@ from PIL import ImageTk, Image
 
 class UserInterface:
 
-    def __init__(self, window, title):
 
-        
+    def __init__(self, window, title):        
         self.sourceCam    = 0
         self.isRecording  = False
-        self.vid          = VideoCapture(self.sourceCam)
+        
+        try:
+            self.vid          = VideoCapture(self.sourceCam)
+        except RuntimeError:
+            print("COULD NOT FIND CAMERA")
+            
         self.overlay      = cv2.imread('../assets/overlay2.png')
         self.alignOverlay = True
 
@@ -60,7 +65,11 @@ class UserInterface:
         self.window.config(menu=self.menu)
 
         #sets up space for the video
-        self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
+        try:
+            self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
+        except AttributeError:
+            print("NO VIDEO TO DISPLAY")
+            self.canvas = tk.Canvas(self.window, width = 640, height = 480)
         self.canvas.pack()
         
         ##############################################
@@ -80,13 +89,14 @@ class UserInterface:
         self.update()
 
         self.window.mainloop()
-
-
         
     #start video recording
     def begin_capture(self):
+    
+        #Toggle Capability of Pressing Buttons
         self.capture_button["state"] = "disabled"
-        self.stop_button["state"] = "normal"
+        self.stop_button   ["state"] = "normal"
+        
         print("Started here")
         self.vid.new_writer()
         self.isRecording = True
@@ -94,23 +104,34 @@ class UserInterface:
     #stop video recording
     #open up a prompt to name file to save to
     def stop_capture(self):
+    
+        #Toggle Capability of Pressing Buttons
         self.capture_button["state"] = "normal"
-        self.stop_button["state"] = "disabled"
+        self.stop_button   ["state"] = "disabled"
+        
         print("Stopped here")
+        self.vid.save()
+        
         self.isRecording = False
         self.vid.close_writer()
 
 
     #Sends video frames to the gui, no slowdown so far
     def update(self):
-        ret, frame = self.vid.get_frame(self.isRecording)
-        if ret:
-            if self.alignOverlay:
-                frame = cv2.addWeighted(frame,0.5,self.overlay,0.5,0)
+        try:    
+            ret, frame = self.vid.get_frame(self.isRecording)
+            
+            if ret:
+                if self.alignOverlay:
+                    frame = cv2.addWeighted(frame,1,self.overlay,1,0)
 
-            self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
-            self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
-        self.canvas.after(1, self.update)
+                self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
+                self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
+            self.canvas.after(1, self.update)
+            
+        except AttributeError:
+            print("NO VIDEO TO UPDATE")
+        
         # exit
 
     def toggle_overlay(self):
