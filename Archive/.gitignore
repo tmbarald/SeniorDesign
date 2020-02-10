@@ -1,3 +1,4 @@
 
 GUI_Code/output.avi
 GUI_Code/__pycache__/VideoCapture.cpython-37.pyc
+*.avi

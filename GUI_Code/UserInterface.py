@@ -35,7 +35,7 @@ class UserInterface:
         ##############################################
         #                   MENUS                    #
         ##############################################
-        
+        self.isSettingsOpen = False
 
         #main menu bar
         self.menu          = tk.Menu(self.window)           
@@ -150,12 +150,20 @@ class UserInterface:
             self.alignOverlay = True
         
     def update_settings(self):
-        print("Menu item selected!\n")
+        if self.isSettingsOpen:
+            print('The settings wundow is already open!')
+            return
         self.window.settings = tk.Tk()
         self.window.settings.title("Settings")
         self.window.settings.geometry('350x200')
-        self.btn = tk.Button(self.window.settings, text = "Click me to close", command = self.window.settings.destroy)
+        self.window.settings.protocol("WM_DELETE_WINDOW", self.close_settings_window)
+        self.btn = tk.Button(self.window.settings, text = "Click me to close", command = self.close_settings_window)
         self.btn.grid(column=1, row=0)
-        #self.settings.
-    
+        if ~self.isSettingsOpen:
+            self.isSettingsOpen = True
+        
+    def close_settings_window(self):
+        self.isSettingsOpen = False
+        self.window.settings.destroy()
 
+    
