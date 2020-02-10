@@ -22,20 +22,31 @@ class VideoCapture:
         self.config.enable_stream(rs.stream.depth, self.width, self.height, rs.format.z16, self.fps)
         self.config.enable_stream(rs.stream.color, self.width, self.height, rs.format.rgb8, self.fps)
         
-        self.pipeline.start(self.config)
+        self.profile = self.pipeline.start(self.config)
 
         #Saving the file
         self.fourcc    = cv2.VideoWriter_fourcc(*self.videoType)
         self.color_out = cv2.VideoWriter('color_out.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
         self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
 
+        self.depth_sensor = self.profile.get_device().first_depth_sensor()
+        self.depth_scale = self.depth_sensor.get_depth_scale()
+        print("Depth scale is: ", self.depth_scale)
+        self.clipping_distance_in_meters = 1
+        self.clipping_distance = self.clipping_distance_in_meters / self.depth_scale
+        
+        self.align_to = rs.stream.color
+        self.align = rs.align(self.align_to)
+
+
     #update camera
     def get_frame(self, isRecording):
         
         #wait for frames from d435
-        frames      = self.pipeline.wait_for_frames()
-        depth_frame = frames.get_depth_frame()
-        color_frame = frames.get_color_frame()
+        frames          = self.pipeline.wait_for_frames()
+        aligned_frames  = self.align.process(frames)
+        depth_frame     = aligned_frames.get_depth_frame()
+        color_frame     = aligned_frames.get_color_frame()
 
         # Convert images to numpy arrays
         depth_image = np.asanyarray(depth_frame.get_data())
@@ -71,4 +82,3 @@ class VideoCapture:
             self.pipeline.stop()
         except:
             pass
-    
