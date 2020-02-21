@@ -16,7 +16,19 @@ class VideoCapture:
         self.height = 480
         self.fps    = 60
         self.fileName = 'default'
-                
+        
+        ''' 
+        #   Not sure on how to use these filters in Python 
+        #   https://github.com/IntelRealSense/librealsense/tree/master/examples/measure 
+
+        # Processing blocks
+        self.dec = rs.decimation_filter()
+        self.dec.set_option(rs.option.filter_magnitude, 8)
+        self.spat = rs.spatial_filter()
+        self.spat.set_option(rs.option.holes_fill, 5)
+        self.temp = rs.temporal_filter()
+        '''
+
         self.pipeline = rs.pipeline()        
         self.config   = rs.config()
         self.config.enable_stream(rs.stream.depth, self.width, self.height, rs.format.z16, self.fps)
@@ -30,18 +42,23 @@ class VideoCapture:
         self.depth_out = cv2.VideoWriter('depth_out.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
 
         self.depth_sensor = self.profile.get_device().first_depth_sensor()
+        self.depth_sensor.set_option(rs.option.visual_preset, 2)
+
+        ''' 
+        # Used to get depth scale
         self.depth_scale = self.depth_sensor.get_depth_scale()
         print("Depth scale is: ", self.depth_scale)
         self.clipping_distance_in_meters = 1
         self.clipping_distance = self.clipping_distance_in_meters / self.depth_scale
-        
+        '''
+
         self.align_to = rs.stream.color
         self.align = rs.align(self.align_to)
 
 
+
     #update camera
     def get_frame(self, isRecording):
-        
         #wait for frames from d435
         frames          = self.pipeline.wait_for_frames()
         aligned_frames  = self.align.process(frames)

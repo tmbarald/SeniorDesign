@@ -3,5 +3,5 @@
 *.pyc
 *.pyc
 *.pyc
-GUI_Code/color_out.avi
-GUI_Code/depth_out.avi
+*.avi
+*.avi

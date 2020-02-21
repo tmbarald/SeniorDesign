@@ -142,7 +142,6 @@ class UserInterface:
             print("NO VIDEO TO UPDATE")
         
         # exit
-
     def toggle_overlay(self):
         if self.alignOverlay:
             self.alignOverlay = False
