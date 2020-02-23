@@ -10,7 +10,31 @@ import os
 import csv
 import datetime
 
-vid = cv2.VideoCapture('bigwminwecraftcolor_out.avi')
+
+def getArea(points):
+    print(points, " overall points -- ")
+    contours = np.array([pts[12], pts[13], pts[14], pts[15], pts[16], pts[17], pts[18], pts[19]])
+    print(contours, " contours ---")
+    area = cv2.contourArea(contours)
+    return round(area)
+
+
+def getHeight(points):
+    top = points[14]
+    bottom = points[18]
+
+    height = np.linalg.norm(top-bottom)
+    return round(height, 0)
+
+def getWidth(points):
+    left = points[12]
+    right = points[16]
+
+    width = np.linalg.norm(left - right)
+    return round(width, 0)
+
+
+vid = cv2.VideoCapture('test.avi')
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
@@ -99,44 +123,9 @@ while vid.isOpened():
                 #output = face_utils.visualize_facial_landmarks(frame, shape)
                 #cv2.imshow("Image", output)
 
-    def getArea(points):
-        print(points, " overall points -- ")
-        contours = np.array([pts[12], pts[13], pts[14], pts[15], pts[16], pts[17], pts[18], pts[19]])
-        print(contours, " contours ---")
-        area = cv2.contourArea(contours)
-        return round(area)
-
-
-    def getHeight(points):
-        top = points[14]
-        bottom = points[18]
-
-        height = np.linalg.norm(top-bottom)
-        return round(height, 0)
-
-    def getWidth(points):
-        left = points[12]
-        right = points[16]
-
-        width = np.linalg.norm(left - right)
-        return round(width, 0)
-
-#    cv2.imshow('frame', frame
-
     if cv2.waitKey(1) & 0xFF == ord('q') or frame is None:
         break
 
 vid.release()
 cv2.destroyAllWindows()
-
-
-
-            # cv2.waitKey(0)
-
-
-
-
-
-
-
 

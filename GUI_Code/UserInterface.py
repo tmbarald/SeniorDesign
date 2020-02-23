@@ -12,7 +12,6 @@ from PIL import ImageTk, Image
 
 class UserInterface:
 
-
     def __init__(self, window, title):        
         self.sourceCam    = 0
         self.isRecording  = False
@@ -107,6 +106,7 @@ class UserInterface:
         self.stop_button   ["state"] = "normal"
         
         print("Started here")
+        self.vid.save()
         self.vid.new_writer()
         self.isRecording = True
 
@@ -119,7 +119,7 @@ class UserInterface:
         self.stop_button   ["state"] = "disabled"
         
         print("Stopped here")
-        self.vid.save()
+        # self.vid.save()
         
         self.isRecording = False
         self.vid.close_writer()
@@ -141,7 +141,6 @@ class UserInterface:
         except AttributeError:
             print("NO VIDEO TO UPDATE")
         
-        # exit
     def toggle_overlay(self):
         if self.alignOverlay:
             self.alignOverlay = False
@@ -158,11 +157,9 @@ class UserInterface:
         self.window.settings.protocol("WM_DELETE_WINDOW", self.close_settings_window)
         self.btn = tk.Button(self.window.settings, text = "Click me to close", command = self.close_settings_window)
         self.btn.grid(column=1, row=0)
-        if ~self.isSettingsOpen:
+        if not self.isSettingsOpen:
             self.isSettingsOpen = True
         
     def close_settings_window(self):
         self.isSettingsOpen = False
         self.window.settings.destroy()
-
-    
