@@ -6,7 +6,7 @@ import pyrealsense2 as rs
 
 
 #video class
-class VideoCapture:
+class VideoCapture_old:
     def __init__(self,sourceCam):
 
         #getting the webcam
