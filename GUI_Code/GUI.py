@@ -1,5 +1,5 @@
 import tkinter as tk
 from UserInterface import UserInterface
 
-#Create GUI
+# Create GUI
 master = UserInterface(tk.Tk(), "VVV")

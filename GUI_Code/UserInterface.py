@@ -2,13 +2,14 @@ import tkinter.filedialog
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from PIL import ImageTk, Image
+import webbrowser as wb
 
 import cv2
-import time
 import numpy as np
 
 from VideoCapture import VideoCapture
-from PIL import ImageTk, Image
+
 
 class UserInterface:
 
@@ -19,7 +20,7 @@ class UserInterface:
         try:
             self.vid = VideoCapture(self.sourceCam)
         except RuntimeError:
-            print("COULD NOT FIND CAMERA")
+            print("COULD NOT FIND CAMERA! -- Maybe check the connection?")
             
         self.overlay = cv2.imread('../assets/overlay2.png')
         self.alignOverlay = True
@@ -36,13 +37,13 @@ class UserInterface:
         ##############################################
         self.isSettingsOpen = False
 
-        #main menu bar
+        # Main menu bar
         self.menu          = tk.Menu(self.window)           
         self.file_menu     = tk.Menu(self.menu)             #file sub menu child
         self.settings_menu = tk.Menu(self.menu)             #settings sub menu child
         self.help_menu     = tk.Menu(self.menu)             #help sub menu child
         
-        #items for file submenu
+        # Items for file submenu
         self.file_menu.add_command(label = 'New Video', command=self.update_settings)
         self.file_menu.add_command(label = 'New Analysis', command=self.update_settings)
         self.file_menu.add_command(label = 'Open Video', command=self.update_settings)
@@ -51,25 +52,25 @@ class UserInterface:
         self.file_menu.add_command(label = 'Exit', command=self.window.destroy)
         self.menu.add_cascade(label='File', menu=self.file_menu)
 
-        #items for the settings submenu
+        # Items for the settings submenu
         self.settings_menu.add_command(label = 'Resolution', command=self.update_settings)
         self.settings_menu.add_command(label = 'FPS', command=self.update_settings)
         self.settings_menu.add_command(label = 'Video Extension', command=self.update_settings)
         self.settings_menu.add_command(label = 'Save Video Seperately', command=self.update_settings)
         self.menu.add_cascade(label='Settings', menu=self.settings_menu)
         
-        #items for the help submenu
-        self.help_menu.add_command(label = 'VVV Documentation', command=self.update_settings)
-        self.help_menu.add_command(label = 'VVV GitHub', command=self.update_settings)
-        self.help_menu.add_command(label = 'Python', command=self.update_settings)
-        self.help_menu.add_command(label = 'RealSenseSDK', command=self.update_settings)
-        self.help_menu.add_command(label = 'OpenCV', command=self.update_settings)
+        # Items for the help submenu
+        self.help_menu.add_command(label = 'VVV Documentation', command= lambda:wb.open('https://github.com/tmbarald/SeniorDesign/wiki'))
+        self.help_menu.add_command(label = 'VVV GitHub', command= lambda:wb.open('https://github.com/tmbarald/SeniorDesign'))
+        self.help_menu.add_command(label = 'Python', command= lambda:wb.open('https://docs.python.org/3.7/'))
+        self.help_menu.add_command(label = 'RealSenseSDK', command= lambda:wb.open('https://github.com/IntelRealSense/librealsense'))
+        self.help_menu.add_command(label = 'OpenCV', command= lambda:wb.open('https://docs.opencv.org/3.4/d1/dfb/intro.html'))
         self.help_menu.add_command(label = 'About', command=self.update_settings)
         self.menu.add_cascade(label='Help', menu=self.help_menu)
 
         self.window.config(menu=self.menu)
 
-        #sets up space for the video
+        # Sets up space for the video
         try:
             self.canvas = tk.Canvas(window, width=2*self.vid.width, height=self.vid.height)
         except AttributeError:
@@ -81,55 +82,45 @@ class UserInterface:
         #                  BUTTONS                   #
         ##############################################
         self.capture_button = tk.Button(window, text = "Begin Capture", command=self.begin_capture)
-        #self.capture_button.pack()
         self.capture_button.grid(column = 0, row = 8, sticky = "nsew")
         
         self.stop_button = tk.Button(window, text = "Stop Capture", state = "disabled", command = self.stop_capture)
-        #self.stop_button.pack()
         self.stop_button.grid(column = 1, row = 8, sticky = "nsew", padx = 1)
         
         self.toggle_overlay_button = tk.Button(window, text = "Toggle Overlay", command=self.toggle_overlay)
-        #self.toggle_overlay_button.pack()
         self.toggle_overlay_button.grid(column = 7, row = 8, sticky = "nsew")
 
-        #Cannot run continuously
-        self.delay = .1
+        # Cannot run continuously
+        self.delay = .01
         self.update()
 
         self.window.mainloop()
         
-    #start video recording
+    # Start video recording
     def begin_capture(self):
     
-        #Toggle Capability of Pressing Buttons
+        # Toggle Capability of Pressing Buttons
         self.capture_button["state"] = "disabled"
         self.stop_button   ["state"] = "normal"
         
-        print("Started here")
         self.vid.save()
         self.vid.new_writer()
         self.isRecording = True
 
-    #stop video recording
-    #open up a prompt to name file to save to
+    # Stop video recording
     def stop_capture(self):
     
-        #Toggle Capability of Pressing Buttons
+        # Toggle Capability of Pressing Buttons
         self.capture_button["state"] = "normal"
         self.stop_button   ["state"] = "disabled"
-        
-        print("Stopped here")
-        # self.vid.save()
         
         self.isRecording = False
         self.vid.close_writer()
 
-
-    #Sends video frames to the gui, no slowdown so far
+    # Sends video frames to the gui, no slowdown so far
     def update(self):
         try:    
             ret, frame = self.vid.get_frame(self.isRecording)
-            
             if ret:
                 if self.alignOverlay:
                     frame = cv2.addWeighted(frame,1,self.overlay,1,0)
