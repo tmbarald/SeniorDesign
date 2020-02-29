@@ -40,14 +40,15 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
 full_path = os.getcwd()
-if not os.path.isdir(full_path + "\\test_output"):
-    path = os.path.join(full_path, "test_output")
+path = os.path.join(full_path, "test_output")
+if not os.path.isdir(path):
     os.mkdir(path)
     print("Output folder created") # remove this for later
 else:
     print("output already created")
 now = datetime.datetime.now()
-with open(full_path+"\\test_output"+'\\output_'+ str(now.year)+str(now.month)+str(now.day)+'.csv', 'a', newline='') as csvfile:
+path = os.path.join(path, 'output_'+ str(now.year)+str(now.month)+str(now.day)+'.csv')
+with open(path, 'a', newline='') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',')
     spamwriter.writerow(['Frame', 'Height', 'Width', 'Protrusion', 'Total Area'])
 
@@ -113,9 +114,9 @@ while vid.isOpened():
                         cv2.line(fin, left, right, (255, 0, 0), 1)
                         cv2.imshow("ROI", roi)
                         cv2.imshow("Image", fin)
-                        filename = full_path+"\\test_output"+"\\frame_"+str(frame_count)+".png"
+                        filename = os.path.join(full_path,'test_output','frame_'+str(frame_count)+'.png')
                         cv2.imwrite(filename, fin)
-    with open(full_path + "\\test_output" + '\\output_' + str(now.year) + str(now.month) + str(now.day) + '.csv', 'a', newline='') as csvfile:
+    with open(path, 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',')
         spamwriter.writerow([str(frame_count), str(height), str(width), str(pro), str(area)])
 

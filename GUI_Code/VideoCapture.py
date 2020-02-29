@@ -15,9 +15,9 @@ import datetime
 
 # Get the working directory, so that files can be saved in the correct location
 full_path = os.getcwd()
-if not os.path.isdir(full_path + "\\depth_out"):
-    path = os.path.join(full_path, "depth_out")
-    os.mkdir(path)
+depth_path = os.path.join(full_path, "depth_out")
+if not os.path.isdir(depth_path):
+    os.mkdir(depth_path)
 
 # Video class
 class VideoCapture:
@@ -27,6 +27,7 @@ class VideoCapture:
         self.videoType  = 'XVID'
         self.width      = 640
         self.height     = 480
+        # FPS is off on my computer
         self.fps        = 30
         self.fileName   = 'default'
         self.frame_num  = 0
@@ -71,7 +72,6 @@ class VideoCapture:
         self.align_to   = rs.stream.color
         self.align      = rs.align(self.align_to)
 
-
     # Update camera
     def get_frame(self, isRecording):
         # Wait for autoexposure to finish before saving frames
@@ -96,6 +96,8 @@ class VideoCapture:
         # Saves RGB video and depth info (in progress)
         if isRecording:
             self.color_out.write(cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB))
+            now = datetime.datetime.now()
+            np.save(os.path.join(depth_path, str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+'_frame'+str(self.frame_num)), depth_image)
 
             # # Saving depth data as recieved is to intensive
             # # Tried saving to data structure, then writing to file afterwards crashes program
@@ -131,8 +133,8 @@ class VideoCapture:
     def write_depth_data(self):
         # Get the time of execution for file naming
         now = datetime.datetime.now()
-        for frame in self.depth_dict.keys():
-            np.savetxt(full_path+"\\depth_out\\"+ str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+'_frame'+str(frame)+'.txt', self.depth_dict[frame], fmt='%i')
+        # for frame in self.depth_dict.keys():
+        #     np.savetxt(full_path+"\\depth_out\\"+ str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+'_frame'+str(frame)+'.txt', self.depth_dict[frame], fmt='%i')
     
     # Destructor
     def __del__(self):
