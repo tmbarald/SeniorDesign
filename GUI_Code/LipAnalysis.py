@@ -10,7 +10,31 @@ import os
 import csv
 import datetime
 
-vid = cv2.VideoCapture('bigwminwecraftcolor_out.avi')
+
+def getArea(points):
+    #print(points, " overall points -- ")
+    contours = np.array([pts[12], pts[13], pts[14], pts[15], pts[16], pts[17], pts[18], pts[19]])
+    #print(contours, " contours ---")
+    area = cv2.contourArea(contours)
+    return round(area)
+
+
+def getHeight(points):
+    top = points[14]
+    bottom = points[18]
+
+    height = np.linalg.norm(top-bottom)
+    return round(height, 0)
+
+def getWidth(points):
+    left = points[12]
+    right = points[16]
+
+    width = np.linalg.norm(left - right)
+    return round(width, 0)
+
+
+vid = cv2.VideoCapture('balls.avi')
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
@@ -32,6 +56,7 @@ pro = 0
 height = 0
 width = 0
 area = 0
+prevFrame = None
 
 while vid.isOpened():
     ret, frame = vid.read()
@@ -68,8 +93,12 @@ while vid.isOpened():
                         pop = pop + 1
                     # extract the ROI of the face region as a separate image
                         (x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
+                        if prevFrame is not None:
+                            for opticalFlow in range(len(pts)):
+                                #print(pts[LipStructure], " ---- ", prevFrame[LipStructure])
+                                cv2.arrowedLine(frame, tuple(prevFrame[opticalFlow]), tuple(pts[opticalFlow]), (0, 255, 0), 1)
                         roi = frame[y:y + h, x:x + w]
-                        roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
+                        #roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
                     # show the particular face part
                         area = getArea(pts)
                         height = getHeight(pts)
@@ -91,6 +120,7 @@ while vid.isOpened():
                         cv2.imshow("Image", fin)
                         filename = full_path+"\\test_output"+"\\frame_"+str(frame_count)+".png"
                         cv2.imwrite(filename, fin)
+                        prevFrame = pts
     with open(full_path + "\\test_output" + '\\output_' + str(now.year) + str(now.month) + str(now.day) + '.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',')
         spamwriter.writerow([str(frame_count), str(height), str(width), str(pro), str(area)])
