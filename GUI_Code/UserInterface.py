@@ -30,7 +30,7 @@ class UserInterface:
         self.window.option_add('*tearOff', False)
         self.window.title(title)
         
-        self.window.iconbitmap('.\\icons.\\Minecraft.ico')
+        #self.window.iconbitmap('.\\icons.\\Minecraft.ico')
 
         ##############################################
         #                   MENUS                    #
@@ -140,7 +140,7 @@ class UserInterface:
         
     def update_settings(self):
         if self.isSettingsOpen:
-            print('The settings wundow is already open!')
+            print('The settings window is already open!')
             return
         self.window.settings = tk.Tk()
         self.window.settings.title("Settings")
