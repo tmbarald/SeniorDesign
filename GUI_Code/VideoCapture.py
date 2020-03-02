@@ -15,6 +15,8 @@ import datetime
 
 # Get the working directory, so that files can be saved in the correct location
 full_path = os.getcwd()
+
+#this needs to work for linux
 if not os.path.isdir(full_path + "\\depth_out"):
     path = os.path.join(full_path, "depth_out")
     os.mkdir(path)
@@ -33,8 +35,8 @@ class VideoCapture:
         self.depth_dict = dict()
         
         ''' 
-        #   Not sure on how to use these filters in Python 
-        #   https://github.com/IntelRealSense/librealsense/tree/master/examples/measure 
+        #Not sure on how to use these filters in Python 
+        #https://github.com/IntelRealSense/librealsense/tree/master/examples/measure 
 
         # Processing blocks
         self.dec = rs.decimation_filter()
