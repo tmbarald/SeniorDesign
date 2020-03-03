@@ -5,6 +5,7 @@ import pyrealsense2 as rs
 from imutils import face_utils
 import dlib
 import imutils
+import matplotlib.pyplot as plt
 from scipy.stats import norm
 import os
 import csv
@@ -93,12 +94,27 @@ while vid.isOpened():
                         pop = pop + 1
                     # extract the ROI of the face region as a separate image
                         (x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
-                        if prevFrame is not None:
+                        if prevFrame is not None and pop == 21:
+                            plt.clf()
+                            plt.cla()
+                            fig, ax = plt.subplots()
                             for opticalFlow in range(len(pts)):
-                                #print(pts[LipStructure], " ---- ", prevFrame[LipStructure])
-                                cv2.arrowedLine(frame, tuple(prevFrame[opticalFlow]), tuple(pts[opticalFlow]), (0, 255, 0), 1)
+                               # xs = [prevFrame[opticalFlow, 0], pts[opticalFlow, 0]]
+                                #ys = [prevFrame[opticalFlow, 1], pts[opticalFlow, 1]]
+                                origin = prevFrame[opticalFlow, 0], prevFrame[opticalFlow]
+                                u = (pts[opticalFlow, 0]) - prevFrame[opticalFlow, 0]
+                                v = -(pts[opticalFlow, 1]) + prevFrame[opticalFlow, 1]
+                                if v == 0 and u == 0:
+                                    circle = plt.Circle((pts[opticalFlow, 0], pts[opticalFlow, 1]), radius=1, color='b')
+                                    ax.add_artist(circle)
+                                else:
+                                    plt.quiver(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], u, v)
+                                #plt.axes().arrow(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], pts[opticalFlow, 0], pts[opticalFlow, 1], head_width=0.05, head_length=0.1, color='b')
+                                plt.grid(b = True, which='major')
+                                #print(pts[opticalFlow], " ---- ", prevFrame[opticalFlow], " ------ ", frame_count)
+                                #cv2.arrowedLine(frame, tuple(prevFrame[opticalFlow]), tuple(pts[opticalFlow]), (0, 255, 0), 1)
                         roi = frame[y:y + h, x:x + w]
-                        #roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
+                        roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
                     # show the particular face part
                         area = getArea(pts)
                         height = getHeight(pts)
@@ -118,21 +134,25 @@ while vid.isOpened():
                         cv2.line(fin, left, right, (255, 0, 0), 1)
                         cv2.imshow("ROI", roi)
                         cv2.imshow("Image", fin)
+                        if frame_count >= 30 and pop == 21:
+                            plt.gca().invert_yaxis()
+                            plt.show()
                         filename = full_path+"\\test_output"+"\\frame_"+str(frame_count)+".png"
                         cv2.imwrite(filename, fin)
-                        prevFrame = pts
+            prevFrame = pts
     with open(full_path + "\\test_output" + '\\output_' + str(now.year) + str(now.month) + str(now.day) + '.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',')
         spamwriter.writerow([str(frame_count), str(height), str(width), str(pro), str(area)])
-
+    if cv2.waitKey(1) & 0xFF == ord('q') or frame is None:
+        break
                     # visualize all facial landmarks with a transparent overlay
                 #output = face_utils.visualize_facial_landmarks(frame, shape)
                 #cv2.imshow("Image", output)
-
+"""
     def getArea(points):
-        print(points, " overall points -- ")
+ #       print(points, " overall points -- ")
         contours = np.array([pts[12], pts[13], pts[14], pts[15], pts[16], pts[17], pts[18], pts[19]])
-        print(contours, " contours ---")
+#        print(contours, " contours ---")
         area = cv2.contourArea(contours)
         return round(area)
 
@@ -150,11 +170,9 @@ while vid.isOpened():
 
         width = np.linalg.norm(left - right)
         return round(width, 0)
-
+"""
 #    cv2.imshow('frame', frame
 
-    if cv2.waitKey(1) & 0xFF == ord('q') or frame is None:
-        break
 
 vid.release()
 cv2.destroyAllWindows()
