@@ -97,7 +97,6 @@ while vid.isOpened():
                         if prevFrame is not None and pop == 21:
                             plt.clf()
                             plt.cla()
-                            fig, ax = plt.subplots()
                             for opticalFlow in range(len(pts)):
                                # xs = [prevFrame[opticalFlow, 0], pts[opticalFlow, 0]]
                                 #ys = [prevFrame[opticalFlow, 1], pts[opticalFlow, 1]]
@@ -105,8 +104,7 @@ while vid.isOpened():
                                 u = (pts[opticalFlow, 0]) - prevFrame[opticalFlow, 0]
                                 v = -(pts[opticalFlow, 1]) + prevFrame[opticalFlow, 1]
                                 if v == 0 and u == 0:
-                                    circle = plt.Circle((pts[opticalFlow, 0], pts[opticalFlow, 1]), radius=1, color='b')
-                                    ax.add_artist(circle)
+                                    plt.quiver(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], 1, 1, color='r')
                                 else:
                                     plt.quiver(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], u, v)
                                 #plt.axes().arrow(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], pts[opticalFlow, 0], pts[opticalFlow, 1], head_width=0.05, head_length=0.1, color='b')
