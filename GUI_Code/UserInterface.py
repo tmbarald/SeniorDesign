@@ -91,9 +91,7 @@ class UserInterface:
         self.toggle_overlay_button.grid(column = 7, row = 8, sticky = "nsew")
 
         # Cannot run continuously
-        self.delay = .01
         self.update()
-
         self.window.mainloop()
         
     # Start video recording
@@ -127,7 +125,7 @@ class UserInterface:
 
                 self.imgtk = ImageTk.PhotoImage(image=Image.fromarray(frame))
                 self.canvas.create_image(0, 0, image=self.imgtk, anchor=tk.NW)
-            self.canvas.after(1, self.update)
+            self.canvas.after(int(1000/self.vid.fps), self.update)
             
         except AttributeError:
             print("NO VIDEO TO UPDATE")

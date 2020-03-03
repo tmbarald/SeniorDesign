@@ -27,11 +27,11 @@ class VideoCapture:
         self.videoType  = 'XVID'
         self.width      = 640
         self.height     = 480
-        # FPS is off on my computer
+
+        # FPS is off on my video files (alex)
         self.fps        = 30
         self.fileName   = 'default'
         self.frame_num  = 0
-        self.depth_dict = dict()
         
         ''' 
         #   Not sure on how to use these filters in Python 
@@ -97,15 +97,9 @@ class VideoCapture:
         if isRecording:
             self.color_out.write(cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB))
             now = datetime.datetime.now()
+            print(now)
             np.save(os.path.join(depth_path, str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+'_frame'+str(self.frame_num)), depth_image)
-
-            # # Saving depth data as recieved is to intensive
-            # # Tried saving to data structure, then writing to file afterwards crashes program
-            # self.depth_dict[self.frame_num] = depth_image[int(self.width/2), int(self.height/2)]
-            # self.write_depth_data(depth_image, self.frame_num)
-            # self.depth_out.write(depth_colormap)
             
-
         # Stack both images horizontally
         images = np.hstack((color_image, depth_colormap))
 
@@ -120,21 +114,11 @@ class VideoCapture:
     # Free up the video writer objects
     def close_writer(self):
         self.color_out.release()
-        # # Below doesn't work currently
-        # self.write_depth_data()
-        # self.depth_dict.clear()
 
     # Open fileDialog so user can select location and name for video file
     def save(self):
         # This needs to be fixed
         self.fileName = tk.filedialog.asksaveasfilename(initialdir = full_path, title = "Save As",filetypes =[("Video files","*.avi")])
-    
-    # Write depth data to text file so it can be accessed in data processing
-    def write_depth_data(self):
-        # Get the time of execution for file naming
-        now = datetime.datetime.now()
-        # for frame in self.depth_dict.keys():
-        #     np.savetxt(full_path+"\\depth_out\\"+ str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+'_frame'+str(frame)+'.txt', self.depth_dict[frame], fmt='%i')
     
     # Destructor
     def __del__(self):
