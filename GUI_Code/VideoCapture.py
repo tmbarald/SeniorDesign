@@ -115,7 +115,7 @@ class VideoCapture:
 
     # Create new video writer object to write video frames
     def new_writer(self):
-        self.color_out = cv2.VideoWriter(self.fileName + '.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
+        self.color_out = cv2.VideoWriter(self.fileName + , cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
 
     # Free up the video writer objects
     def close_writer(self):

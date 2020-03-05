@@ -10,6 +10,7 @@ import os
 import csv
 import datetime
 
+x = 0
 verbose   = False
 createCSV = False
 allFrames = False
@@ -48,19 +49,17 @@ def getWidth(points):
 
 
 def scalePoint(pt1, pt2, scaleFactor):
-    #y = mx+b
-    #need b
     #in order to scale we move our point along the line by scale factor
     dy = pt2[1] - pt1[1]
     dx = pt2[0] - pt1[0]
 
-    scaledPt = [pt2[0] + (dx * scaleFactor), pt2[1] + (dx * scaleFactor)]
+    scaledPt = [pt2[0] + (dx * scaleFactor), pt2[1] + (dy * scaleFactor)]
     return scaledPt
 
 #Video to be Processed
 #this should have a prompt from the GUI to find the video 
 #so it does not have to be hard coded
-vid = cv2.VideoCapture('butts.avi')
+vid = cv2.VideoCapture('butts.avi.avi')
 
 detector  = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
@@ -100,12 +99,9 @@ while vid.isOpened():
     frame_count = frame_count + 1
 
     if frame is not None:
-        #***QUESTION WHY DO WE RESIZE THE FRAME HERE?***
         frame = imutils.resize(frame, width=500)
         gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        #what exactly is this outputting?
-        #are rects frames?
         #the whole for loop iterates on rects and it comes from the dlib library frontal face detector
         rects = detector(gray, 1)
 
@@ -134,9 +130,11 @@ while vid.isOpened():
                     #print(pts, " -- ", pop)
                     #There are 20 pairs in shape which are being drawn on the mouth
                     for (x, y) in shape[i:j]:
+                        x = 1 + x
+                        
                         cv2.circle(clone, (x, y), 1, color, -1)
 
-                        print(x, " : ", y, " --- ", pop)
+                        #print(x, " : ", y, " --- ", pop)
                         #important ones are 15 and 19
 
                         top   = tuple(pts[14])
@@ -152,16 +150,6 @@ while vid.isOpened():
                         # extract the ROI of the face region as a separate image
                         (x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))                                           
                         
-                        scaleFactor = 3
-                        green = (0,255,0)
-
-                        #draw lines
-                        if prevFrame is not None:
-                            for index in range(len(pts)):
-                                #print(pts[LipStructure], " ---- ", prevFrame[LipStructure])
-                                cv2.arrowedLine(frame, tuple(prevFrame[index]), tuple(scalePoint(prevFrame[index],pts[index],scaleFactor)), green, 1)
-                      
-
                         roi = frame[y:y + h, x:x + w]
                         roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
                         
@@ -183,9 +171,29 @@ while vid.isOpened():
                         cv2.putText(fin, height_string,    (imgwidth, 120), cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
                         cv2.putText(fin, protusion_string, (imgwidth, 150), cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
 
+                        scaleFactor = 2
+                        color = (0,255,0)
+                        thickness = 2
+                       
+                        #draw lines
+                        if prevFrame is not None:
+                            for index in range(len(pts)):
+                                #print(pts[LipStructure], " ---- ", prevFrame[LipStructure])                                
+                                
+                                scaledPoint = tuple(scalePoint(prevFrame[index],pts[index],scaleFactor))
+                                
+                                if pts[index] is not prevFrame[index]:
+
+                                    #if(index == 4):
+                                        #print('current point: ' + str(pts[index]) + ' scaled point :' + str(scaledPoint) + ' previous frame: ' + str(tuple(prevFrame[index])))
+                                        #print('----------------------------')
+                                    if(index == 3):
+                                        cv2.arrowedLine(fin, tuple(prevFrame[index]), scaledPoint, color, thickness)
+                                    #cv2.arrowedLine(fin,(0,0),(100,100),color, 2)
+
                         #Place line for width and height
-                        cv2.line(fin, top,  bot,   (0, 255, 0), 1)
-                        cv2.line(fin, left, right, (255, 0, 0), 1)
+                        #cv2.line(fin, top,  bot,   (0, 255, 0), 1)
+                        #cv2.line(fin, left, right, (255, 0, 0), 1)
 
                         #Region of Interest
                         cv2.imshow("ROI", roi)
@@ -194,8 +202,9 @@ while vid.isOpened():
                         #write to file
                         filename = os.path.join(full_path,"test_output", "frame_"+str(frame_count)+".png")
                         cv2.imwrite(filename, fin)
-
-                        prevFrame = pts
+                        
+                    prevFrame = pts
+                        
                     #else:
                     #    if(allFrames == True):
                             #code to include frames where mouth is not the name
