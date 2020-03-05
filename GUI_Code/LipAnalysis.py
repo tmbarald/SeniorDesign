@@ -104,7 +104,10 @@ while vid.isOpened():
                                 u = (pts[opticalFlow, 0]) - prevFrame[opticalFlow, 0]
                                 v = -(pts[opticalFlow, 1]) + prevFrame[opticalFlow, 1]
                                 if v == 0 and u == 0:
-                                    plt.quiver(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], 1, 1, color='r')
+                                    #plt.quiver(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], 1, 1, color='r')
+                                    ax = plt.gca()
+                                    circle = plt.Circle((prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1]), 1, color='r')
+                                    ax.add_artist(circle)
                                 else:
                                     plt.quiver(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], u, v)
                                 #plt.axes().arrow(prevFrame[opticalFlow, 0], prevFrame[opticalFlow, 1], pts[opticalFlow, 0], pts[opticalFlow, 1], head_width=0.05, head_length=0.1, color='b')
@@ -132,7 +135,12 @@ while vid.isOpened():
                         cv2.line(fin, left, right, (255, 0, 0), 1)
                         cv2.imshow("ROI", roi)
                         cv2.imshow("Image", fin)
-                        if frame_count >= 30 and pop == 21:
+                        if frame_count >= 10 and pop == 21:
+                            minvals = np.amin(pts, axis = 0) #finds min value for columns 1 and 2
+                            maxvals = np.amax(pts, axis=0) # finds max for columns 1 and 2. Both are in a 2 index matrix
+                            #print(minvals[0], " -- ", maxvals[0])
+                            plt.xlim([minvals[0]-10, maxvals[0]+10]) #x axis
+                            plt.ylim([minvals[1]-10, maxvals[1]+10]) #y axis
                             plt.gca().invert_yaxis()
                             plt.show()
                         filename = full_path+"\\test_output"+"\\frame_"+str(frame_count)+".png"
@@ -145,31 +153,7 @@ while vid.isOpened():
         break
                     # visualize all facial landmarks with a transparent overlay
                 #output = face_utils.visualize_facial_landmarks(frame, shape)
-                #cv2.imshow("Image", output)
-"""
-    def getArea(points):
- #       print(points, " overall points -- ")
-        contours = np.array([pts[12], pts[13], pts[14], pts[15], pts[16], pts[17], pts[18], pts[19]])
-#        print(contours, " contours ---")
-        area = cv2.contourArea(contours)
-        return round(area)
-
-
-    def getHeight(points):
-        top = points[14]
-        bottom = points[18]
-
-        height = np.linalg.norm(top-bottom)
-        return round(height, 0)
-
-    def getWidth(points):
-        left = points[12]
-        right = points[16]
-
-        width = np.linalg.norm(left - right)
-        return round(width, 0)
-"""
-#    cv2.imshow('frame', frame
+                #cv2.imshow("Image", outp
 
 
 vid.release()
