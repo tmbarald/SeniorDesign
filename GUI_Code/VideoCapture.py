@@ -15,6 +15,8 @@ import datetime
 
 # Get the working directory, so that files can be saved in the correct location
 full_path = os.getcwd()
+
+#this needs to work for linux
 if not os.path.isdir(full_path + "\\depth_out"):
     path = os.path.join(full_path, "depth_out")
     os.mkdir(path)
@@ -33,8 +35,8 @@ class VideoCapture:
         self.depth_dict = dict()
         
         ''' 
-        #   Not sure on how to use these filters in Python 
-        #   https://github.com/IntelRealSense/librealsense/tree/master/examples/measure 
+        #Not sure on how to use these filters in Python 
+        #https://github.com/IntelRealSense/librealsense/tree/master/examples/measure 
 
         # Processing blocks
         self.dec = rs.decimation_filter()
@@ -113,7 +115,7 @@ class VideoCapture:
 
     # Create new video writer object to write video frames
     def new_writer(self):
-        self.color_out = cv2.VideoWriter(self.fileName + '.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
+        self.color_out = cv2.VideoWriter(self.fileName + , cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
 
     # Free up the video writer objects
     def close_writer(self):
