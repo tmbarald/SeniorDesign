@@ -1,17 +1,17 @@
 import cv2
-from   PIL import ImageTk, Image
+from PIL import ImageTk, Image
 import numpy as np
 import pyrealsense2 as rs
-from   imutils import face_utils
+from imutils import face_utils
 import dlib
 import imutils
-from   scipy.stats import norm
+from scipy.stats import norm
 import os
 import csv
 import datetime
 
 x = 0
-verbose   = False
+verbose = False
 createCSV = False
 allFrames = False
 
@@ -36,13 +36,13 @@ def getArea(points):
     return round(area)
 
 def getHeight(points):
-    top    = points[14]
+    top = points[14]
     bottom = points[18]
     height = np.linalg.norm(top-bottom)
     return round(height, 0)
 
 def getWidth(points):
-    left  = points[12]
+    left = points[12]
     right = points[16]
     width = np.linalg.norm(left - right)
     return round(width, 0)
@@ -61,11 +61,11 @@ def scalePoint(pt1, pt2, scaleFactor):
 #so it does not have to be hard coded
 vid = cv2.VideoCapture('butts.avi.avi')
 
-detector  = dlib.get_frontal_face_detector()
+detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
 full_path = os.getcwd()
-path      = os.path.join(full_path, "test_output")
+path = os.path.join(full_path, "test_output")
 
 if not os.path.isdir(path):    
     os.mkdir(path)
@@ -76,7 +76,7 @@ else:
     if(verbose == True):
         print("output already created")
 
-now  = datetime.datetime.now()
+now = datetime.datetime.now()
 path = os.path.join(path,"output_" + str(now.year)+str(now.month)+str(now.day)+'.csv')
 
 if(verbose == True):
@@ -88,19 +88,19 @@ if(createCSV == True):
         CSVwriter.writerow(['Frame', 'Height', 'Width', 'Protrusion', 'Total Area'])
 
 frame_count = 0
-pro         = 0
-height      = 0
-width       = 0
-area        = 0
-prevFrame   = None
+pro = 0
+height = 0
+width = 0
+area = 0
+prevFrame = None
 
 while vid.isOpened():
-    ret, frame  = vid.read()
+    ret, frame = vid.read()
     frame_count = frame_count + 1
 
     if frame is not None:
         frame = imutils.resize(frame, width=500)
-        gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         #the whole for loop iterates on rects and it comes from the dlib library frontal face detector
         rects = detector(gray, 1)
@@ -137,9 +137,9 @@ while vid.isOpened():
                         #print(x, " : ", y, " --- ", pop)
                         #important ones are 15 and 19
 
-                        top   = tuple(pts[14])
-                        bot   = tuple(pts[18])
-                        left  = tuple(pts[12])
+                        top = tuple(pts[14])
+                        bot = tuple(pts[18])
+                        left = tuple(pts[12])
                         right = tuple(pts[16])
 
                         if pop >= 12:
@@ -157,19 +157,19 @@ while vid.isOpened():
                         area   = getArea(pts)
                         height = getHeight(pts)
                         width  = getWidth(pts)
-                        frame_string     = "Frame: " + str(frame_count)
-                        area_string      = "Area: " + str(area)
-                        height_string    = "Height: " + str(height)
-                        width_string     = "Width: " + str(width)
+                        frame_string = "Frame: " + str(frame_count)
+                        area_string = "Area: " + str(area)
+                        height_string = "Height: " + str(height)
+                        width_string = "Width: " + str(width)
                         protusion_string = "Protrusion: " + str(pro)
                         fin = cv2.copyMakeBorder(clone.copy(), 0,0,0, 250, cv2.BORDER_CONSTANT, value=(0,0,0))
 
                         #Place Measurements into code
-                        cv2.putText(fin, frame_string,     (imgwidth, 30),  cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
-                        cv2.putText(fin, area_string,      (imgwidth, 60),  cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
-                        cv2.putText(fin, width_string,     (imgwidth, 90),  cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
-                        cv2.putText(fin, height_string,    (imgwidth, 120), cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
-                        cv2.putText(fin, protusion_string, (imgwidth, 150), cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
+                        cv2.putText(fin, frame_string,(imgwidth, 30),  cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
+                        cv2.putText(fin, area_string,(imgwidth, 60),  cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
+                        cv2.putText(fin, width_string,(imgwidth, 90),  cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
+                        cv2.putText(fin, height_string,(imgwidth, 120), cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
+                        cv2.putText(fin, protusion_string,(imgwidth, 150), cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
 
                         scaleFactor = 2
                         color = (0,255,0)
@@ -209,8 +209,8 @@ while vid.isOpened():
                     #    if(allFrames == True):
                             #code to include frames where mouth is not the name
     if(createCSV == True):
-        with open(path, 'a', newline='') as csvfile:
-            CSVwriter = csv.writer(csvfile, delimiter=',')
+        with open(path, 'a', newline = '') as csvfile:
+            CSVwriter = csv.writer(csvfile, delimiter = ',')
             CSVwriter.writerow([str(frame_count), str(height), str(width), str(pro), str(area)])
 
                 #visualize all facial landmarks with a transparent overlay
