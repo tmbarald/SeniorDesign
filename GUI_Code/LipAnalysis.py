@@ -129,14 +129,10 @@ while vid.isOpened():
                     #old print statement
                     #print(pts, " -- ", pop)
                     #There are 20 pairs in shape which are being drawn on the mouth
-                    for (x, y) in shape[i:j]:
-                        x = 1 + x
-                        
+                    for (x, y) in shape[i:j]:                        
                         cv2.circle(clone, (x, y), 1, color, -1)
-
                         #print(x, " : ", y, " --- ", pop)
                         #important ones are 15 and 19
-
                         top = tuple(pts[14])
                         bot = tuple(pts[18])
                         left = tuple(pts[12])
@@ -162,7 +158,7 @@ while vid.isOpened():
                         height_string = "Height: " + str(height)
                         width_string = "Width: " + str(width)
                         protusion_string = "Protrusion: " + str(pro)
-                        fin = cv2.copyMakeBorder(clone.copy(), 0,0,0, 250, cv2.BORDER_CONSTANT, value=(0,0,0))
+                        fin = cv2.copyMakeBorder(clone.copy(), 0,0,0, 250, cv2.BORDER_CONSTANT, value = (0,0,0))
 
                         #Place Measurements into code
                         cv2.putText(fin, frame_string,(imgwidth, 30),  cv2.FONT_HERSHEY_COMPLEX, 0.7, color, 2)
@@ -177,23 +173,18 @@ while vid.isOpened():
                        
                         #draw lines
                         if prevFrame is not None:
-                            for index in range(len(pts)):
-                                #print(pts[LipStructure], " ---- ", prevFrame[LipStructure])                                
-                                
+                            for index in range(len(pts)):                               
                                 scaledPoint = tuple(scalePoint(prevFrame[index],pts[index],scaleFactor))
                                 
+                                #Draw Lines from previous point to next with scaling set by the variable scaleFactor
                                 if pts[index] is not prevFrame[index]:
-
-                                    #if(index == 4):
-                                        #print('current point: ' + str(pts[index]) + ' scaled point :' + str(scaledPoint) + ' previous frame: ' + str(tuple(prevFrame[index])))
-                                        #print('----------------------------')
                                     if(index == 3):
                                         cv2.arrowedLine(fin, tuple(prevFrame[index]), scaledPoint, color, thickness)
-                                    #cv2.arrowedLine(fin,(0,0),(100,100),color, 2)
+
 
                         #Place line for width and height
-                        #cv2.line(fin, top,  bot,   (0, 255, 0), 1)
-                        #cv2.line(fin, left, right, (255, 0, 0), 1)
+                        cv2.line(fin, top, bot, (0, 255, 0), 1)
+                        cv2.line(fin, left, right, (255, 0, 0), 1)
 
                         #Region of Interest
                         cv2.imshow("ROI", roi)
@@ -204,10 +195,11 @@ while vid.isOpened():
                         cv2.imwrite(filename, fin)
                         
                     prevFrame = pts
-                        
+                    
+                    #possible code to include frames where mouth is not the name
                     #else:
                     #    if(allFrames == True):
-                            #code to include frames where mouth is not the name
+                            
     if(createCSV == True):
         with open(path, 'a', newline = '') as csvfile:
             CSVwriter = csv.writer(csvfile, delimiter = ',')
