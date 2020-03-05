@@ -13,12 +13,6 @@ import os
 import csv
 import datetime
 
-# Get the working directory, so that files can be saved in the correct location
-full_path = os.getcwd()
-depth_path = os.path.join(full_path, "depth_out")
-if not os.path.isdir(depth_path):
-    os.mkdir(depth_path)
-
 # Video class
 class VideoCapture:
     def __init__(self,sourceCam):
@@ -33,6 +27,9 @@ class VideoCapture:
         self.fileName   = 'default'
         self.frame_num  = 0
         
+        # Get the working directory, so that files can be saved in the correct location
+        self.main_dir = os.getcwd()
+
         ''' 
         #   Not sure on how to use these filters in Python 
         #   https://github.com/IntelRealSense/librealsense/tree/master/examples/measure 
@@ -96,10 +93,11 @@ class VideoCapture:
         # Saves RGB video and depth info (in progress)
         if isRecording:
             self.color_out.write(cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB))
-            now = datetime.datetime.now()
-            print(now)
-            np.save(os.path.join(depth_path, str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+'_frame'+str(self.frame_num)), depth_image)
-            
+            f = os.path.join(self.depth_wd, 'frame' + str(self.frame_num))
+            print(f)
+            np.save(f, depth_image)
+            # ^ THIS NEEDS TO BE FIXED ^ 
+
         # Stack both images horizontally
         images = np.hstack((color_image, depth_colormap))
 
@@ -118,8 +116,16 @@ class VideoCapture:
     # Open fileDialog so user can select location and name for video file
     def save(self):
         # This needs to be fixed
-        self.fileName = tk.filedialog.asksaveasfilename(initialdir = full_path, title = "Save As",filetypes =[("Video files","*.avi")])
-    
+        self.fileName = tk.filedialog.asksaveasfilename(initialdir = self.main_dir, title = "Save As",filetypes =[("Video files","*.avi")])
+        self.depth_wd = os.path.normpath(os.path.join(self.fileName, 'depth_out'))
+        try:
+            os.mkdir(self.fileName)
+            os.mkdir(self.depth_wd)
+            print('Project output folder created!')
+        except FileExistsError:
+            print('Project output folder already exists!') 
+
+
     # Destructor
     def __del__(self):
         try:

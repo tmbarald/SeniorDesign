@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 import webbrowser as wb
+import os
 
 import cv2
 import numpy as np
@@ -21,7 +22,8 @@ class UserInterface:
             self.vid = VideoCapture(self.sourceCam)
         except RuntimeError:
             print("COULD NOT FIND CAMERA! -- Maybe check the connection?")
-            
+
+    
         self.overlay = cv2.imread('../assets/overlay2.png')
         self.alignOverlay = True
 

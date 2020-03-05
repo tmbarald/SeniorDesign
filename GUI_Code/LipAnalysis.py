@@ -34,6 +34,10 @@ def getWidth(points):
     width = np.linalg.norm(left - right)
     return round(width, 0)
 
+def getProtrusion(points):
+    # in future, pass in the file name to get the correct depth files
+    frame_depth = np.open(os.path.join(full_path, 'test'))
+
 
 vid = cv2.VideoCapture('test.avi')
 
@@ -48,6 +52,8 @@ if not os.path.isdir(path):
 else:
     print("output already created")
 now = datetime.datetime.now()
+
+# In the future we can pass in the filename and use that
 path = os.path.join(path, 'output_'+ str(now.year)+str(now.month)+str(now.day)+'.csv')
 with open(path, 'a', newline='') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',')
