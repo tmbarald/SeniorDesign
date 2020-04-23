@@ -58,3 +58,20 @@ Future work on the menu system includes, manipulating camera settings such as re
 
 ### VideoCapture.py
 
+VideoCapture.py is responsible for creating the video capture process. During its initialization, the Video Capture class sets the FPS to be 30 and the resolution to be 640x480. This was hard-coded into our scripts in order to accomodate our camera. These could be changed in the future. Then, the configurations required for retrieving the depth data from each frame. The documentation that we refered to for this was through the Intel RealSense library. This initialization is called once the User Interface is created. This class has several key functions that are critical to our project.
+
+<b> get_frame() </b> - This function, once called from the UI, waits for the camera to capture a frame. Our camera captured both RGB and Depth data, so we made sure to accomodate both feeds. Once these frames are received, they are translated to be viewable in the GUI and are returned. If video capture has begun, each frame is saved to a video file until capture concludes.
+
+<b> new _writer() </b> - Creates the writer that starts video capture. Called when the "Start Capture" button on the GUI is pressed.
+
+<b> close_writer() </b> - Closes the writer necessary for video capture. Called when the "Stop Capture" button on the GUI is pressed. Only saves RGB data, depth data will need to be implemented at a later date. 
+
+<b> save() </b> - Creates a file dialog that will allow the user to name the file and choose where it is saved. 
+
+<b> write_depth_data() </b> - Saves the data capture from the depth camera to the working directory. 
+
+<b> Desctructor </b> - Shuts the camer down. Necessary for a smooth exit when the user closes the GUI.
+
+### LipAnalysis.py 
+
+
