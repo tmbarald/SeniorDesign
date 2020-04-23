@@ -10,35 +10,42 @@ import os
 import csv
 import datetime
 
-
+# Retrieve area function
 def getArea(points):
-    print(points, " overall points -- ")
+    #print(points, " overall points -- ")
+    #Retrieves outline of inner lip pixels
     contours = np.array([pts[12], pts[13], pts[14], pts[15], pts[16], pts[17], pts[18], pts[19]])
-    print(contours, " contours ---")
+    #print(contours, " contours ---")
+    #Finds area encompassed by these points
     area = cv2.contourArea(contours)
     return round(area)
 
-
+#Retrieve height
 def getHeight(points):
+    #top most inner lip point
     top = points[14]
+    #bottom most innerl ip point
     bottom = points[18]
-
+    #Returns height in pixel count
     height = np.linalg.norm(top-bottom)
     return round(height, 0)
 
 def getWidth(points):
+    #left most inner lip pixel
     left = points[12]
+    #right most inner lip pixel
     right = points[16]
-
+    #returns width in pixel count
     width = np.linalg.norm(left - right)
     return round(width, 0)
 
-
+#Retrieves video, hardcoded in
 vid = cv2.VideoCapture('test.avi')
-
+#Detector and predictor from dlib library
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
+#saves to test directory
 full_path = os.getcwd()
 if not os.path.isdir(full_path + "\\test_output"):
     path = os.path.join(full_path, "test_output")
@@ -51,6 +58,7 @@ with open(full_path+"\\test_output"+'\\output_'+ str(now.year)+str(now.month)+st
     spamwriter = csv.writer(csvfile, delimiter=',')
     spamwriter.writerow(['Frame', 'Height', 'Width', 'Protrusion', 'Total Area'])
 
+#basic parameters
 frame_count = 0
 pro = 0
 height = 0
@@ -58,19 +66,20 @@ width = 0
 area = 0
 
 while vid.isOpened():
-    ret, frame = vid.read()
+    ret, frame = vid.read() #retrieves frame
     frame_count = frame_count + 1
     if frame is not None:
         frame = imutils.resize(frame, width=500)
+        #grays image and passes it to detector 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         rects = detector(gray, 1)
         for(i, rect) in enumerate(rects):
-            shape = predictor(gray, rect)
-            shape = face_utils.shape_to_np(shape)
+            shape = predictor(gray, rect) #predicts where facial landmarks on on face
+            shape = face_utils.shape_to_np(shape) # converts coordinates to np array
             for(name, (i, j)) in face_utils.FACIAL_LANDMARKS_IDXS.items():
-                if name == "mouth":
-                    clone = frame.copy()
-                    imgheight, imgwidth, imgchanells = clone.shape
+                if name == "mouth": #mouth is the only region we care about. determined by dlib
+                    clone = frame.copy() #copies frame for modification
+                    imgheight, imgwidth, imgchanells = clone.shape 
                     cv2.putText(clone, name, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                     # loop over the subset of facial landmarks, drawing the
                     # specific face part
