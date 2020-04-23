@@ -70,7 +70,7 @@ VideoCapture.py is responsible for creating the video capture process. During it
 
 <b> write_depth_data() </b> - Saves the data capture from the depth camera to the working directory. 
 
-<b> Desctructor </b> - Shuts the camer down. Necessary for a smooth exit when the user closes the GUI.
+<b> Destructor </b> - Shuts the camer down. Necessary for a smooth exit when the user closes the GUI.
 
 ### LipAnalysis.py 
 
