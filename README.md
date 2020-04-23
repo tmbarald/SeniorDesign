@@ -74,4 +74,45 @@ VideoCapture.py is responsible for creating the video capture process. During it
 
 ### LipAnalysis.py 
 
+LipAnalysis.py is the script that recognizes facial features of the subject and relays the necessary information (including mouth, height, width, and area) back to the user. This process is currently a standalone process but could easily be incorporated with the User Interface and Video capture classes. When ran, the script first defines its "predictor" and "detector". These components are defined by the library dlib, which utilizes a model to predict facial landmarks of an image. After this, the script creates an filepath where all of the data will be saved. A video, presumably created by the VideoCapture class is opened and then the frame-by-frame analysis is begun. 
 
+The analysis starts with retrieving each frame from the video. If a frame is missing, then the main data processing loop is skipped. Otherwise, the frame is passed into the algorithm. First, the frame detects where possible facial landmarks are on the subject's face and then the predictor determines pixel-specific locations of each landmark. These locations are then passed into a function called "face_utils.shape_to_np()", which converts the set of coordinates into a numpy array. Through this array, the dlib library, and the shape_predictor_68_face_landmarks.dat file, we can identify which pixels belong to the subject's mouth region. For each pixel location belonging to the mouth region, the code iterates through each pixel, places a dot on the frame and gathers relevant data using 4 key functions. After this, the data is outputted to the frame and the process continues until every frame is analyzed. The key functions and components ofthe loop are as follows:
+
+<b> get_area() </b> - Returns the area of the mouth. This is determined by finding the total number of pixels within the inner-most ring of pixels. The pixel range is determined by the dlib library and is constant. 
+
+<b> get_height() </b> - Returns the height of the mouth. Returns the pixel distance between the highest inner lip pixel with the lowest inner lip pixel.
+
+<b> get_width() </b> - returns the width of the mouth. Returns the pixel distance between the left-most inner lip pixel with the right-most inner lip pixe.
+
+<b> Optical Flow Analysis </b> - Not an explicit function of LipAnalysis.py, but for each iteration of the loop after the first frame, each pixel location is compared with its respective location in the previous frame. This data is outputted in a vetor map indicating which direction each pixel has moved. If the pixel has not moved, then a red circle is placed in its respective location. 
+
+LipAnalysis.py has three critical outputs. The first being each relevant piece of data (height, area, width, protrustion, and frame number) is recorded to a CSV file in the working directory. Along with this information, each .png file of the frame and its relevant information is saved to the working directory along with the CSV file. An example of this is below:
+
+![](assets/frame_29.png)
+
+Lastly, the Optical flow analysis provides its output for each from in a .png file. An example of this is below.
+
+![](assets/samplevector.png)
+
+
+### shape_predictor_68_face_landmarks.dat
+
+Lastly, a critical component of our lip recognition scripts comes from the shape_predictor_68_face_landmarks.dat file. Using a pre-trained neural network model, dlib utilizes this file in order to plot 68 points (x,y) on a person's face. The ordering of these pixels does not change. These 68 points are separated into regions as well, these regions are encoded into the "FACIAL_LANDMARKS_IDXS" dictionary referenced in LipAnalysis.py. These regions and there range of points are as follows:
+
+Jaw - (0, 17)
+
+Right Eyebrow - (17, 22)
+
+Left Eyebrow - (22, 27)
+
+Nose - (27, 35)
+
+Right Eye - (36, 42)
+
+Left Eye - (42, 48)
+
+<b> Mouth - (48, 68) </b>
+
+![](assets/shape_predictor_diagram.jpeg)
+
+Here, we are able to isolate pixels regions that we need. Other regions could be utilized in further iterations of this project. There are a few drawbacks with this library however. We noticed that the model suffered for videos that had poor lighting, obstructed faces, and jerky movements. This will need to be taken into account for the future. 
