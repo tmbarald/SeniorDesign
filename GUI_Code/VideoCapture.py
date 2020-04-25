@@ -23,12 +23,14 @@ class VideoCapture:
         self.height     = 480
 
         # FPS is off on my video files (alex)
-        self.fps        = 30
-        self.fileName   = 'default'
-        self.frame_num  = 0
+        self.fps            = 30
+        self.fileName       = 'default'
+        self.frame_num      = 1
+        self.exposure_count = 0
         
         # Get the working directory, so that files can be saved in the correct location
         self.main_dir = os.getcwd()
+
 
         ''' 
         #   Not sure on how to use these filters in Python 
@@ -72,9 +74,9 @@ class VideoCapture:
     # Update camera
     def get_frame(self, isRecording):
         # Wait for autoexposure to finish before saving frames
-        if(self.frame_num < 30):
+        if(self.exposure_count < 30):
             frames = self.pipeline.wait_for_frames()
-            self.frame_num += 1
+            self.exposure_count += 1
             return (0, 0)
         # Wait for frames to be recieved    
         frames          = self.pipeline.wait_for_frames()
@@ -94,20 +96,17 @@ class VideoCapture:
         if isRecording:
             self.color_out.write(cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB))
             f = os.path.join(self.depth_wd, 'frame' + str(self.frame_num))
-            print(f)
             np.save(f, depth_image)
-            # ^ THIS NEEDS TO BE FIXED ^ 
+            self.frame_num += 1
 
         # Stack both images horizontally
         images = np.hstack((color_image, depth_colormap))
 
-        # Update frame counter
-        self.frame_num += 1
         return (1, images)
 
     # Create new video writer object to write video frames
     def new_writer(self):
-        self.color_out = cv2.VideoWriter(self.fileName + '.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height))
+        self.color_out = cv2.VideoWriter(self.fileName + '.avi', cv2.CAP_ANY, self.fourcc, self.fps, (self.width,self.height), True)
 
     # Free up the video writer objects
     def close_writer(self):
@@ -115,8 +114,8 @@ class VideoCapture:
 
     # Open fileDialog so user can select location and name for video file
     def save(self):
-        # This needs to be fixed
         self.fileName = tk.filedialog.asksaveasfilename(initialdir = self.main_dir, title = "Save As",filetypes =[("Video files","*.avi")])
+        # I would like to put the video into its directory (alex)
         self.depth_wd = os.path.normpath(os.path.join(self.fileName, 'depth_out'))
         try:
             os.mkdir(self.fileName)
