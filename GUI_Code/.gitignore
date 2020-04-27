@@ -1,10 +1,8 @@
-
 *.pyc
-*.pyc
-*.pyc
-*.pyc
-*.avi
+*.cpython-37.pyc
 *.avi
 *.png
 *.txt
 *.whl
+*.npy
+*.csv
