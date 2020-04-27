@@ -40,7 +40,7 @@ If no camera is found, the user is presented with an error and must restart the 
 The last part of the UserInterface class's instantiation is creating buttons used to stop and start recording.
 Most importantly, the UserInterface class creates the canvas which shows a live feed from the camera. This live feed is retrieved from the Video Capture class in VideoCapture.py
 
-Notable functions of this class include: begin_capture(), stop_capture(), update(), toggle_overaly(), update_settings(), and close_settings_window().
+Notable functions of this class include: begin_capture(), stop_capture(), update(), toggle_overaly(), update_settings(), close_settings_window(), new_analysis(), new_video(), safe_exit(), and exit().
 
 <b> begin_capture() </b> - Calls the video writer and begins video capture. Called via a button press.
 
@@ -53,6 +53,14 @@ Notable functions of this class include: begin_capture(), stop_capture(), update
 <b> update_settings() </b> - Opens a new, small window that will allow the user to change the settings of the camera. This is still a work in progress. Triggered via a button press on the main GUI.
 
 <b> close_settings_window() </b> - Closes the settings window. Triggered via a button click on the settings window.
+
+<b> new_analysis() </b> - Opens a new instance of the LipAnalysis class for performing the analysis. Triggered via button click in the file menu.
+
+<b> new_video() </b> - Enables the video feed from the depth camera and attempts to close a portion of the LipAnalysis object. Triggered via button click in the file menu.
+
+<b> safe_exit() </b> - Sets the  <i>quit</i> variable to true and attempts to stop all future canvas updates. Triggered via button click in the file menu or attempting to close the program.
+
+<b> exit() </b> - Attempts to close the main parent window and destroy all children widgets in order to free memory and end the program. Triggered via internal call from within the update() function. 
 
 Future work on the menu system includes, manipulating camera settings such as resolution and FPS as well as running the data processing scripts from the GUI itself.
 
@@ -76,13 +84,15 @@ VideoCapture.py is responsible for creating the video capture process. During it
 
 LipAnalysis.py is the script that recognizes facial features of the subject and relays the necessary information (including mouth, height, width, and area) back to the user. This process is currently a standalone process but could easily be incorporated with the User Interface and Video capture classes. When ran, the script first defines its "predictor" and "detector". These components are defined by the library dlib, which utilizes a model to predict facial landmarks of an image. After this, the script creates an filepath where all of the data will be saved. A video, presumably created by the VideoCapture class is opened and then the frame-by-frame analysis is begun. 
 
-The analysis starts with retrieving each frame from the video. If a frame is missing, then the main data processing loop is skipped. Otherwise, the frame is passed into the algorithm. First, the frame detects where possible facial landmarks are on the subject's face and then the predictor determines pixel-specific locations of each landmark. These locations are then passed into a function called "face_utils.shape_to_np()", which converts the set of coordinates into a numpy array. Through this array, the dlib library, and the shape_predictor_68_face_landmarks.dat file, we can identify which pixels belong to the subject's mouth region. For each pixel location belonging to the mouth region, the code iterates through each pixel, places a dot on the frame and gathers relevant data using 4 key functions. After this, the data is outputted to the frame and the process continues until every frame is analyzed. The key functions and components ofthe loop are as follows:
+<b> analysis() </B> - The analysis starts with retrieving each frame from the video. If a frame is missing, then the main data processing loop is skipped. Otherwise, the frame is passed into the algorithm. First, the frame detects where possible facial landmarks are on the subject's face and then the predictor determines pixel-specific locations of each landmark. These locations are then passed into a function called "face_utils.shape_to_np()", which converts the set of coordinates into a numpy array. Through this array, the dlib library, and the shape_predictor_68_face_landmarks.dat file, we can identify which pixels belong to the subject's mouth region. For each pixel location belonging to the mouth region, the code iterates through each pixel, places a dot on the frame and gathers relevant data using 4 key functions. After this, the data is outputted to the frame and the process continues until every frame is analyzed. The key functions and components ofthe loop are as follows:
 
 <b> get_area() </b> - Returns the area of the mouth. This is determined by finding the total number of pixels within the inner-most ring of pixels. The pixel range is determined by the dlib library and is constant. 
 
 <b> get_height() </b> - Returns the height of the mouth. Returns the pixel distance between the highest inner lip pixel with the lowest inner lip pixel.
 
-<b> get_width() </b> - returns the width of the mouth. Returns the pixel distance between the left-most inner lip pixel with the right-most inner lip pixe.
+<b> get_width() </b> - Returns the width of the mouth. Returns the pixel distance between the left-most inner lip pixel with the right-most inner lip pixel.
+
+<b> get_protrusion() </b> - Returns the protrusion of the lips as a measurement of the average depth from the camera subtracted from the top-center point. Needs work to make the numbers more accurate and easier to understand.
 
 <b> Optical Flow Analysis </b> - Not an explicit function of LipAnalysis.py, but for each iteration of the loop after the first frame, each pixel location is compared with its respective location in the previous frame. This data is outputted in a vetor map indicating which direction each pixel has moved. If the pixel has not moved, then a red circle is placed in its respective location. 
 
